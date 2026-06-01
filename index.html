@@ -579,16 +579,54 @@ main{padding-top:54px;}
 </div>
 
 <script>
-window.addEventListener('scroll',()=>{const h=document.documentElement;document.getElementById('prog').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';});
-function goTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+// SAFE NAV — standalone so it ALWAYS works regardless of script below
+function goTo(id){
+  var el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth'});
+}
 function showT(id,btn){
-  const tabs = btn.parentElement.parentElement.querySelectorAll('.tab-panel');
-  const btns = btn.parentElement.querySelectorAll('.tbb');
-  tabs.forEach(p=>p.classList.remove('active'));
-  btns.forEach(b=>b.classList.remove('active'));
+  var tabs=btn.parentElement.parentElement.querySelectorAll('.tab-panel');
+  var btns=btn.parentElement.querySelectorAll('.tbb');
+  tabs.forEach(function(p){p.classList.remove('active');});
+  btns.forEach(function(b){b.classList.remove('active');});
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
 }
+function toggleChat(){
+  var p=document.getElementById('ai-panel');
+  if(p) p.classList.toggle('open');
+}
+function toggleSettings(){
+  var s=document.getElementById('ai-settings');
+  if(s) s.classList.toggle('open');
+  var k=document.getElementById('api-key-input');
+  var gk=document.getElementById('gemini-key-input');
+  if(k) k.value=localStorage.getItem('groq_key')||'';
+  if(gk) gk.value=localStorage.getItem('gemini_key')||'';
+}
+function saveKey(){
+  var g=document.getElementById('api-key-input').value;
+  var gm=document.getElementById('gemini-key-input').value;
+  localStorage.setItem('groq_key',g);
+  localStorage.setItem('gemini_key',gm);
+  toggleSettings();
+}
+function saveHTML(){
+  var c=document.documentElement.outerHTML;
+  var b=new Blob([c],{type:'text/html'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(b);
+  a.download='bitacora_stefani_actualizada.html';
+  a.click();
+}
+window.addEventListener('scroll',function(){
+  var h=document.documentElement;
+  var p=document.getElementById('prog');
+  if(p) p.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+});
+</script>
+
+<script>
 
 Chart.defaults.color='#8892b0';Chart.defaults.font.family="'DM Sans',sans-serif";Chart.defaults.font.size=10;
 const gc='rgba(255,255,255,0.05)';
