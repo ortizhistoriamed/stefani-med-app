@@ -14,8 +14,18 @@
 :root{--bg:#0a0e1a;--bg2:#0f1524;--bg3:#161d30;--bg4:#1c2540;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8eaf2;--text2:#8892b0;--text3:#4a5568;--accent:#64b5f6;--red:#ef5350;--red-s:rgba(239,83,80,0.12);--orange:#ffa726;--ora-s:rgba(255,167,38,0.12);--green:#66bb6a;--grn-s:rgba(102,187,106,0.12);--purple:#ab47bc;--pur-s:rgba(171,71,188,0.12);--teal:#26c6da;--tel-s:rgba(38,198,218,0.1);--fd:'DM Serif Display',Georgia,serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace;--r:12px;--rs:8px;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;line-height:1.6;}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;line-height:1.6;overflow-x:hidden;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px;}
+
+.page { display: none; padding-top: 10px; padding-bottom: 20px; animation: fadeIn 0.3s ease-out; }
+.page.active { display: block; }
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+#pwa-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: var(--bg3); border-bottom: 1px solid var(--border); padding: 12px 20px; display: none; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+#pwa-banner.show { display: flex; animation: slideDown 0.3s forwards; }
+@keyframes slideDown{from{transform:translateY(-100%);}to{transform:translateY(0);}}
+.pwa-btn { background: var(--accent); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 12px; }
+.pwa-close { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; padding: 5px; }
 
 nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,14,26,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.5rem;height:54px;display:flex;align-items:center;justify-content:space-between;}
 .nav-brand{display:flex;align-items:center;gap:10px;}
@@ -214,6 +224,19 @@ main{padding-top:54px;}
 </style>
 </head>
 <body>
+<div id="pwa-banner">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="background:linear-gradient(135deg,var(--accent),var(--teal));width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#0a0e1a;">SO</div>
+    <div>
+      <div style="font-weight:600;font-size:13px;">Instalar Bitácora Médica</div>
+      <div style="font-size:11px;color:var(--text2);">Acceso rápido y modo offline</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:5px;">
+    <button class="pwa-btn" onclick="installPWA()">Instalar</button>
+    <button class="pwa-close" onclick="hidePWA()">✖</button>
+  </div>
+</div>
 <div class="prog" id="prog"></div>
 
 <nav>
@@ -222,26 +245,27 @@ main{padding-top:54px;}
     <div><span class="nav-title">Bitácora Médica</span><span class="nav-sub">Stefani Ortiz · Unificada + IA</span></div>
   </div>
   <div class="nav-links">
-    <button class="nl active" onclick="goTo('hero')"><svg viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-14v-9h-3z"/></svg>Inicio</button>
-    <button class="nl" onclick="goTo('alertas')"><svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.83L19.5 19h-15L12 5.83zM11 10v5h2v-5h-2zm0 7v2h2v-2h-2z"/></svg>Alertas</button>
-    <button class="nl" onclick="goTo('timeline')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Cronología</button>
-    <button class="nl" onclick="goTo('sintomas')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
-    <button class="nl" onclick="goTo('comparativa')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Resultados</button>
-    <button class="nl" onclick="goTo('repositorio')"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>Archivo</button>
+    <button class="nl active" onclick="showPage('page-inicio')"><svg viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-14v-9h-3z"/></svg>Inicio</button>
+    <button class="nl" onclick="showPage('page-alertas')"><svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.83L19.5 19h-15L12 5.83zM11 10v5h2v-5h-2zm0 7v2h2v-2h-2z"/></svg>Alertas</button>
+    <button class="nl" onclick="showPage('page-cronologia')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Cronología</button>
+    <button class="nl" onclick="showPage('page-sintomas')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
+    <button class="nl" onclick="showPage('page-resultados')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Resultados</button>
+    <button class="nl" onclick="showPage('page-archivo')"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>Archivo</button>
     <button class="btn-save" onclick="saveHTML()">💾 Guardar</button>
   </div>
 </nav>
 
 <div class="mobile-nav">
-  <button class="mn-btn active" onclick="goTo('hero'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-14v-9h-3z"/></svg>Inicio</button>
-  <button class="mn-btn" onclick="goTo('timeline'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Crono</button>
-  <button class="mn-btn" onclick="goTo('sintomas'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
-  <button class="mn-btn" onclick="goTo('comparativa'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Labs</button>
-  <button class="mn-btn" onclick="goTo('repositorio'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>Archivo</button>
+  <button class="mn-btn active" onclick="showPage('page-inicio')"><svg viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-14v-9h-3z"/></svg>Inicio</button>
+  <button class="mn-btn" onclick="showPage('page-cronologia')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Crono</button>
+  <button class="mn-btn" onclick="showPage('page-sintomas')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
+  <button class="mn-btn" onclick="showPage('page-resultados')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Labs</button>
+  <button class="mn-btn" onclick="showPage('page-archivo')"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>Archivo</button>
   <button class="mn-btn" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>IA</button>
 </div>
 
 <main>
+<div id="page-inicio" class="page active">
 <!-- HERO -->
 <div id="hero" class="hero">
   <div>
@@ -268,6 +292,58 @@ main{padding-top:54px;}
   </div>
 </div>
 
+<div class="sep"></div>
+
+<!-- DIAGNOSTICO -->
+<div id="diagnostico" class="section">
+  <div class="sec-hdr"><span class="sec-num">06</span><h2 class="sec-title">Análisis de la Descompensación</h2></div>
+  <div class="abox orange" style="margin-bottom:1.2rem;">
+    <div class="at">El ciclo destructor: ¿Por qué la intolerancia extrema al esfuerzo?</div>
+    <div class="ab">
+      El cuerpo de Stefani está operando con un "presupuesto energético" mínimo. La combinación es letal:
+      <br><br>
+      <strong>1. Factor Transporte (Anemia):</strong> Aunque la Hb está en 12.5, la Ferritina (20) significa que no hay reservas. Al hacer esfuerzo o exponerse al calor (vasodilatación), el cuerpo no puede movilizar hierro extra para oxigenar los tejidos.<br>
+      <strong>2. Factor Vascular (Disfunción Autonómica):</strong> La hipotensión ortostática documentada por el cardiólogo significa que los vasos sanguíneos no se contraen bien al estar de pie. La sangre se estanca, el corazón se acelera (Taquicardia Paroxística).<br>
+      <strong>3. Factor Hormonal (El "Peaje" Menstrual):</strong> El período que inició el 19/05 barrió con los estrógenos y agotó las pocas reservas de hierro. En la semana post-menstrual, la DHT (51.5) domina sin oposición, disparando la presión intracraneana y causando cefalea intensa.<br>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- PENDIENTES -->
+<div id="pendientes" class="section">
+  <div class="sec-hdr"><span class="sec-num">07</span><h2 class="sec-title">Plan de Acción Integral</h2></div>
+  <div class="g2" style="gap:1.5rem;align-items:start;">
+    <div>
+      <div class="pi"><div class="pn pu">1</div><div><div class="pt">Hierro Intravenoso Urgente</div><div class="pd">Ferritina en 20 no se recuperará con hierro oral.</div></div></div>
+      <div class="pi"><div class="pn pu">2</div><div><div class="pt">Neurología (EEG)</div><div class="pd">Evaluar temblores nocturnos y pérdida de sensibilidad.</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- NEUTRON NOTES SECTION -->
+<div id="neutron-notes-wrapper" style="max-width:1100px;margin:0 auto;padding:2.5rem 2rem;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+    <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--accent));display:flex;align-items:center;justify-content:center;font-size:14px;">🧠</div>
+    <div>
+      <h2 style="font-family:var(--fd);font-size:1.4rem;">Análisis de Neutron</h2>
+      <p style="font-size:11px;color:var(--text3);">Tablero interactivo · Los análisis se guardan localmente en tu dispositivo</p>
+    </div>
+  </div>
+  <div id="neutron-cards-container">
+    <div id="neutron-empty" style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:12px;border:1px dashed var(--border);border-radius:var(--r);">
+      <div style="font-size:2rem;margin-bottom:.5rem;">🚀</div>
+      <strong style="color:var(--text2);">Neutron aún no ha generado ningún análisis</strong><br>
+      Pídele en el chat que te haga una tabla, un resumen o una comparativa de tus datos y aparecerá aquí guardada.
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="page-alertas" class="page">
 <div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
 <!-- ALERTAS -->
 <div id="alertas" style="margin-bottom:2rem;">
@@ -288,6 +364,31 @@ main{padding-top:54px;}
 
 <div class="sep"></div>
 
+<!-- SINTOMAS EN VIGILANCIA -->
+<div id="vigilancia" class="section">
+  <div class="sec-hdr"><span class="sec-num">08</span><h2 class="sec-title">Síntomas Emergentes en Vigilancia</h2></div>
+  <div class="g2">
+    <div class="abox red">
+      <div class="at">Temblores nocturnos esporádicos</div>
+      <div class="ab">Iniciaron posterior a la Punción Lumbar. Temblores durante el sueño (casi mordedura). Riesgo neurológico, evaluar origen (posible actividad epiléptica).</div>
+    </div>
+    <div class="abox red">
+      <div class="at">Pérdida de sensibilidad focal</div>
+      <div class="ab">Afecta principalmente el pie izquierdo, pero con extensión ocasional a las manos. Requiere evaluación neurológica (neuropatía periférica vs desmielinización).</div>
+    </div>
+    <div class="abox orange">
+      <div class="at">Falla térmica / Sudoración nocturna</div>
+      <div class="ab">Sudoración profunda presente desde mediados de 2025. Actualmente evolucionando a problemas más evidentes de disautonomía en la regulación de la temperatura corporal.</div>
+    </div>
+    <div class="abox orange">
+      <div class="at">Intolerancia al calor/esfuerzo</div>
+      <div class="ab">Marcada desde el 31/05/2026. Descompensación rápida con mínimo esfuerzo, vinculada a ferropenia severa (Ferritina 20) y POTS.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="page-cronologia" class="page">
 <!-- CRONOLOGIA -->
 <div id="timeline" class="section">
   <div class="sec-hdr"><span class="sec-num">01</span><h2 class="sec-title">Cronología clínica (Actualizada)</h2></div>
@@ -309,9 +410,30 @@ main{padding-top:54px;}
     </div>
   </div>
 </div>
+</div>
 
-<div class="sep"></div>
+<div id="page-sintomas" class="page">
+<!-- SINTOMAS -->
+<div id="sintomas" class="section">
+  <div class="sec-hdr"><span class="sec-num">05</span><h2 class="sec-title">Sintomatología y Patrones</h2></div>
+  <p style="color:var(--text2);font-size:12px;margin-bottom:1.5rem;">Registro evolutivo de síntomas ingresados a través del Asistente Clínico.</p>
+  
+  <div class="g2" style="align-items:start;">
+    <div>
+      <div class="card-title">Evolución de Intensidad</div>
+      <div class="cw" style="height:220px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;"><canvas id="c-sintomas"></canvas></div>
+    </div>
+    <div>
+      <div class="card-title">Últimos Registros (Memoria Local)</div>
+      <div id="sintomas-list" style="max-height:220px;overflow-y:auto;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;font-size:11px;">
+        <div style="color:var(--text3);font-style:italic;text-align:center;padding:20px 0;">No hay síntomas registrados aún.<br>Habla con la IA para empezar.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 
+<div id="page-resultados" class="page">
 <!-- COMPARATIVA -->
 <div id="comparativa" class="section">
   <div class="sec-hdr"><span class="sec-num">02</span><h2 class="sec-title">Tabla Comparativa (Datos Actualizados)</h2></div>
@@ -429,85 +551,9 @@ main{padding-top:54px;}
     </div>
   </div>
 </div>
-
-<div class="sep"></div>
-
-<!-- SINTOMATOLOGIA -->
-<div id="sintomas" class="section">
-  <div class="sec-hdr"><span class="sec-num">05</span><h2 class="sec-title">Sintomatología y Patrones</h2></div>
-  <p style="color:var(--text2);font-size:12px;margin-bottom:1.5rem;">Registro evolutivo de síntomas ingresados a través del Asistente Clínico.</p>
-  
-  <div class="g2" style="align-items:start;">
-    <div>
-      <div class="card-title">Evolución de Intensidad</div>
-      <div class="cw" style="height:220px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;"><canvas id="c-sintomas"></canvas></div>
-    </div>
-    <div>
-      <div class="card-title">Últimos Registros (Memoria Local)</div>
-      <div id="sintomas-list" style="max-height:220px;overflow-y:auto;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;font-size:11px;">
-        <div style="color:var(--text3);font-style:italic;text-align:center;padding:20px 0;">No hay síntomas registrados aún.<br>Habla con la IA para empezar.</div>
-      </div>
-    </div>
-  </div>
 </div>
 
-<div class="sep"></div>
-
-<!-- DIAGNOSTICO -->
-<div id="diagnostico" class="section">
-  <div class="sec-hdr"><span class="sec-num">06</span><h2 class="sec-title">Análisis de la Descompensación</h2></div>
-  <div class="abox orange" style="margin-bottom:1.2rem;">
-    <div class="at">El ciclo destructor: ¿Por qué la intolerancia extrema al esfuerzo?</div>
-    <div class="ab">
-      El cuerpo de Stefani está operando con un "presupuesto energético" mínimo. La combinación es letal:
-      <br><br>
-      <strong>1. Factor Transporte (Anemia):</strong> Aunque la Hb está en 12.5, la Ferritina (20) significa que no hay reservas. Al hacer esfuerzo o exponerse al calor (vasodilatación), el cuerpo no puede movilizar hierro extra para oxigenar los tejidos.<br>
-      <strong>2. Factor Vascular (Disfunción Autonómica):</strong> La hipotensión ortostática documentada por el cardiólogo significa que los vasos sanguíneos no se contraen bien al estar de pie. La sangre se estanca, el corazón se acelera (Taquicardia Paroxística).<br>
-      <strong>3. Factor Hormonal (El "Peaje" Menstrual):</strong> El período que inició el 19/05 barrió con los estrógenos y agotó las pocas reservas de hierro. En la semana post-menstrual, la DHT (51.5) domina sin oposición, disparando la presión intracraneana y causando cefalea intensa.<br>
-    </div>
-  </div>
-</div>
-
-<div class="sep"></div>
-
-<!-- PENDIENTES -->
-<div id="pendientes" class="section">
-  <div class="sec-hdr"><span class="sec-num">07</span><h2 class="sec-title">Plan de Acción Integral</h2></div>
-  <div class="g2" style="gap:1.5rem;align-items:start;">
-    <div>
-      <div class="pi"><div class="pn pu">1</div><div><div class="pt">Hierro Intravenoso Urgente</div><div class="pd">Ferritina en 20 no se recuperará con hierro oral.</div></div></div>
-      <div class="pi"><div class="pn pu">2</div><div><div class="pt">Neurología (EEG)</div><div class="pd">Evaluar temblores nocturnos y pérdida de sensibilidad.</div></div></div>
-    </div>
-  </div>
-</div>
-
-<div class="sep"></div>
-
-<!-- SINTOMAS EN VIGILANCIA -->
-<div id="vigilancia" class="section">
-  <div class="sec-hdr"><span class="sec-num">08</span><h2 class="sec-title">Síntomas Emergentes en Vigilancia</h2></div>
-  <div class="g2">
-    <div class="abox red">
-      <div class="at">Temblores nocturnos esporádicos</div>
-      <div class="ab">Iniciaron posterior a la Punción Lumbar. Temblores durante el sueño (casi mordedura). Riesgo neurológico, evaluar origen (posible actividad epiléptica).</div>
-    </div>
-    <div class="abox red">
-      <div class="at">Pérdida de sensibilidad focal</div>
-      <div class="ab">Afecta principalmente el pie izquierdo, pero con extensión ocasional a las manos. Requiere evaluación neurológica (neuropatía periférica vs desmielinización).</div>
-    </div>
-    <div class="abox orange">
-      <div class="at">Falla térmica / Sudoración nocturna</div>
-      <div class="ab">Sudoración profunda presente desde mediados de 2025. Actualmente evolucionando a problemas más evidentes de disautonomía en la regulación de la temperatura corporal.</div>
-    </div>
-    <div class="abox orange">
-      <div class="at">Intolerancia al calor/esfuerzo</div>
-      <div class="ab">Marcada desde el 31/05/2026. Descompensación rápida con mínimo esfuerzo, vinculada a ferropenia severa (Ferritina 20) y POTS.</div>
-    </div>
-  </div>
-</div>
-
-<div class="sep"></div>
-
+<div id="page-archivo" class="page">
 <!-- REPOSITORIO -->
 <div id="repositorio" class="section">
   <div class="sec-hdr"><span class="sec-num">09</span><h2 class="sec-title">Archivo Médico (Repositorio)</h2></div>
@@ -524,26 +570,8 @@ main{padding-top:54px;}
     <!-- Tarjetas insertadas via JS -->
   </div>
 </div>
-
-</main>
-
-<!-- NEUTRON NOTES SECTION -->
-<div id="neutron-notes-wrapper" style="max-width:1100px;margin:0 auto;padding:2.5rem 2rem;">
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
-    <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--accent));display:flex;align-items:center;justify-content:center;font-size:14px;">🧠</div>
-    <div>
-      <h2 style="font-family:var(--fd);font-size:1.4rem;">Análisis de Neutron</h2>
-      <p style="font-size:11px;color:var(--text3);">Tablero interactivo · Los análisis se guardan localmente en tu dispositivo</p>
-    </div>
-  </div>
-  <div id="neutron-cards-container">
-    <div id="neutron-empty" style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:12px;border:1px dashed var(--border);border-radius:var(--r);">
-      <div style="font-size:2rem;margin-bottom:.5rem;">🚀</div>
-      <strong style="color:var(--text2);">Neutron aún no ha generado ningún análisis</strong><br>
-      Pídele en el chat que te haga una tabla, un resumen o una comparativa de tus datos y aparecerá aquí guardada.
-    </div>
-  </div>
 </div>
+
 
 <!-- AI WIDGET -->
 <button id="ai-chat-btn" onclick="toggleChat()">💬</button>
@@ -579,11 +607,25 @@ main{padding-top:54px;}
 </div>
 
 <script>
-// SAFE NAV — standalone so it ALWAYS works regardless of script below
-function goTo(id){
-  var el=document.getElementById(id);
-  if(el) el.scrollIntoView({behavior:'smooth'});
+// SAFE NAV & SPA ROUTING — standalone so it ALWAYS works regardless of script below
+function showPage(pageId) {
+  // Update desktop nav
+  document.querySelectorAll('.nl').forEach(function(b) { b.classList.remove('active'); });
+  var activeNl = document.querySelector('.nl[onclick="showPage(\\''+pageId+'\\')"]');
+  if(activeNl) activeNl.classList.add('active');
+  
+  // Update mobile nav
+  document.querySelectorAll('.mn-btn').forEach(function(b) { b.classList.remove('active'); });
+  var activeMn = document.querySelector('.mn-btn[onclick="showPage(\\''+pageId+'\\')"]');
+  if(activeMn) activeMn.classList.add('active');
+  
+  // Show page
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  var p = document.getElementById(pageId);
+  if (p) p.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'auto' });
 }
+
 function showT(id,btn){
   var tabs=btn.parentElement.parentElement.querySelectorAll('.tab-panel');
   var btns=btn.parentElement.querySelectorAll('.tbb');
@@ -624,6 +666,29 @@ window.addEventListener('scroll',function(){
   var p=document.getElementById('prog');
   if(p) p.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
 });
+
+// PWA Install Logic
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  var banner = document.getElementById('pwa-banner');
+  if(banner) banner.classList.add('show');
+});
+function installPWA() {
+  var banner = document.getElementById('pwa-banner');
+  if(banner) banner.classList.remove('show');
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(choiceResult) {
+      deferredPrompt = null;
+    });
+  }
+}
+function hidePWA() {
+  var banner = document.getElementById('pwa-banner');
+  if(banner) banner.classList.remove('show');
+}
 </script>
 
 <script>
