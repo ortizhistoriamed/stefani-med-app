@@ -618,9 +618,11 @@ let neutronNotes = JSON.parse(localStorage.getItem('neutron_notes') || '[]');
 
 const supaUrl = 'https://jksxabgobzfobrvpiuyn.supabase.co';
 const supaKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprc3hhYmdvYnpmb2JydnBpdXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDI3NzMsImV4cCI6MjA5NTg3ODc3M30.ul37DG1R46jMQQoWGM3GtsQ7KzsXOfnpxWKekGQkseA';
-const supabaseClient = supabase.createClient(supaUrl, supaKey);
+let supabaseClient = null;
+if(window.supabase) supabaseClient = window.supabase.createClient(supaUrl, supaKey);
 
 async function loadSupabaseData() {
+  if(!supabaseClient) return;
   try {
     const { data: symData } = await supabaseClient.from('symptoms').select('*').order('timestamp', { ascending: true });
     if (symData && symData.length > 0) {
@@ -690,7 +692,7 @@ function deleteNote(idx) {
   const note = neutronNotes[idx];
   neutronNotes.splice(idx, 1);
   renderNeutronNotes();
-  if (note.id) {
+  if (note.id && supabaseClient) {
     supabaseClient.from('neutron_notes').delete().eq('id', note.id).then(()=>{});
   }
 }
@@ -702,13 +704,15 @@ async function saveNeutronNote(title, html) {
   renderNeutronNotes();
   document.getElementById('neutron-notes-wrapper').scrollIntoView({behavior:'smooth'});
   
-  try {
-    const { data } = await supabaseClient.from('neutron_notes').insert([{ title, html, timestamp }]).select();
-    if (data && data[0]) {
-      neutronNotes[neutronNotes.length - 1] = { ...data[0], timestamp: new Date(data[0].timestamp).getTime() };
+  if(supabaseClient) {
+    try {
+      const { data } = await supabaseClient.from('neutron_notes').insert([{ title, html, timestamp }]).select();
+      if (data && data[0]) {
+        neutronNotes[neutronNotes.length - 1] = { ...data[0], timestamp: new Date(data[0].timestamp).getTime() };
+      }
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {
-    console.error(err);
   }
 }
 
@@ -950,20 +954,21 @@ async function acceptSymptom(title, intensity, body, btn) {
   renderSymptoms();
   btn.parentElement.innerHTML = '<div class="ai-sugg-title">✅ Síntoma guardado en la Nube ☁️</div>';
   
-  try {
-    const { data } = await supabaseClient.from('symptoms').insert([{ title, intensity: parseInt(intensity), body, timestamp }]).select();
-    if (data && data[0]) {
-      symptomsLog[symptomsLog.length - 1] = { ...data[0], timestamp: new Date(data[0].timestamp).getTime() };
+  if(supabaseClient) {
+    try {
+      const { data } = await supabaseClient.from('symptoms').insert([{ title, intensity: parseInt(intensity), body, timestamp }]).select();
+      if (data && data[0]) {
+        symptomsLog[symptomsLog.length - 1] = { ...data[0], timestamp: new Date(data[0].timestamp).getTime() };
+      }
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {
-    console.error(err);
   }
 }
 
 function acceptNeutronCard(btn, title, html) {
   saveNeutronNote(title, html.replace(/&quot;/g,'"').replace(/\\'/g,"'"));
   btn.parentElement.innerHTML = '<div class="ai-sugg-title" style="color:var(--purple);">✅ Análisis guardado en tu tablero.</div>';
-}
 }
 </script>
 <script>
