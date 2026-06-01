@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bitácora Médica — Stefani Ortiz (Unificada + IA)</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0e1a">
+<link rel="apple-touch-icon" href="icon.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--bg:#0a0e1a;--bg2:#0f1524;--bg3:#161d30;--bg4:#1c2540;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8eaf2;--text2:#8892b0;--text3:#4a5568;--accent:#64b5f6;--red:#ef5350;--red-s:rgba(239,83,80,0.12);--orange:#ffa726;--ora-s:rgba(255,167,38,0.12);--green:#66bb6a;--grn-s:rgba(102,187,106,0.12);--purple:#ab47bc;--pur-s:rgba(171,71,188,0.12);--teal:#26c6da;--tel-s:rgba(38,198,218,0.1);--fd:'DM Serif Display',Georgia,serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace;--r:12px;--rs:8px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;line-height:1.6;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,14,26,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.5rem;height:54px;display:flex;align-items:center;justify-content:space-between;}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-logo{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--teal));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--bg);}
+.nav-title{font-family:var(--fd);font-size:14px;}
+.nav-sub{font-size:11px;color:var(--text2);margin-left:4px;}
+.nav-links{display:flex;gap:3px;flex-wrap:wrap;}
+.nl{padding:4px 10px;border-radius:var(--rs);color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;border:none;background:transparent;transition:all .2s;}
+.nl:hover{color:var(--text);background:var(--bg3);}
+.nl.active{color:var(--accent);background:rgba(100,181,246,0.1);}
+.btn-save{background:rgba(102,187,106,0.15);color:var(--green);border:1px solid rgba(102,187,106,0.3);padding:4px 10px;border-radius:var(--rs);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-save:hover{background:var(--green);color:#fff;}
+.prog{position:fixed;top:54px;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--teal));z-index:99;width:0%;transition:width .1s;}
+
+main{padding-top:54px;}
+
+/* HERO */
+.hero{padding:3rem 2rem 2rem;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 300px;gap:2.5rem;align-items:start;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(100,181,246,0.1);border:1px solid rgba(100,181,246,0.2);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--accent);font-weight:500;margin-bottom:1rem;}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.hero h1{font-family:var(--fd);font-size:2.6rem;line-height:1.1;margin-bottom:.5rem;}
+.hero h1 em{font-style:italic;color:var(--accent);}
+.hero-sub{font-size:14px;color:var(--text2);margin-bottom:1.5rem;line-height:1.7;}
+.hero-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem;}
+.mtag{display:flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:11px;color:var(--text2);font-family:var(--fm);}
+.mtag span{color:var(--text);}
+.status-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;}
+.sp-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:.8rem;}
+.sp-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px;}
+.sp-row:last-child{border-bottom:none;}
+.sp-label{color:var(--text2);}
+.sp-val{font-weight:600;font-family:var(--fm);font-size:11px;}
+.s-ok{color:var(--green);}.s-warn{color:var(--orange);}.s-al{color:var(--red);}.s-pd{color:var(--accent);}
+
+/* SECTIONS */
+.section{padding:2.5rem 2rem;max-width:1100px;margin:0 auto;}
+.sec-hdr{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.5rem;}
+.sec-num{font-family:var(--fm);font-size:10px;color:var(--text3);border:1px solid var(--border);border-radius:4px;padding:2px 7px;}
+.sec-title{font-family:var(--fd);font-size:1.7rem;color:var(--text);}
+.sep{width:100%;height:1px;background:var(--border);}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+@media(max-width:900px){.g4{grid-template-columns:repeat(3,1fr);}.hero{grid-template-columns:1fr;}}
+@media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr 1fr;}.hero h1{font-size:2rem;}.nav-links{display:none;}}
+@media(max-width:380px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+
+/* ALERT BOXES */
+.abox{border-radius:var(--rs);padding:.9rem 1rem;margin-bottom:.9rem;border:1px solid;}
+.abox.red{background:var(--red-s);border-color:rgba(239,83,80,.3);}.abox.red .at,.abox.red .ab{color:#ef9a9a;}
+.abox.orange{background:var(--ora-s);border-color:rgba(255,167,38,.3);}.abox.orange .at,.abox.orange .ab{color:#ffcc80;}
+.abox.green{background:var(--grn-s);border-color:rgba(102,187,106,.3);}.abox.green .at,.abox.green .ab{color:#a5d6a7;}
+.abox.blue{background:rgba(100,181,246,.08);border-color:rgba(100,181,246,.25);}.abox.blue .at,.abox.blue .ab{color:#90caf9;}
+.at{font-size:12px;font-weight:600;margin-bottom:3px;}
+.ab{font-size:11px;line-height:1.6;opacity:.9;}
+
+/* TIMELINE */
+.tl-wrap{position:relative;padding-left:2rem;}
+.tl-wrap::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent),var(--border),transparent);}
+.tl-ev{position:relative;margin-bottom:1.4rem;animation:fadeIn 0.5s;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.tl-dot{position:absolute;left:-2rem;top:4px;width:10px;height:10px;border-radius:50%;border:2px solid var(--bg);}
+.tl-dot.crisis{background:var(--red);box-shadow:0 0 8px var(--red);}
+.tl-dot.neuro{background:var(--purple);}
+.tl-dot.lab{background:var(--green);}
+.tl-dot.med{background:var(--accent);}
+.tl-dot.inmuno{background:var(--orange);}
+.tl-dot.pend{background:var(--teal);box-shadow:0 0 8px var(--teal);}
+.tl-dot.cardio{background:#ff7043;}
+.tl-date{font-family:var(--fm);font-size:10px;color:var(--text3);margin-bottom:2px;}
+.tl-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.tl-body{font-size:12px;color:var(--text2);line-height:1.5;}
+.tl-badge{display:inline-block;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:4px;margin-bottom:3px;}
+.tb-crisis{background:var(--red-s);color:var(--red);}
+.tb-neuro{background:var(--pur-s);color:var(--purple);}
+.tb-lab{background:var(--grn-s);color:var(--green);}
+.tb-med{background:rgba(100,181,246,.1);color:var(--accent);}
+.tb-inmuno{background:var(--ora-s);color:var(--orange);}
+.tb-cardio{background:rgba(255,112,67,.12);color:#ff7043;}
+.tb-pend{background:var(--tel-s);color:var(--teal);}
+.yr-mark{font-family:var(--fm);font-size:10px;color:var(--text3);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 10px;display:inline-block;margin:0 0 1rem -2rem;}
+
+/* COMPARATIVE TABLE */
+.comp-table{width:100%;border-collapse:collapse;font-size:12px;}
+.comp-table th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;}
+.comp-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.comp-table tr:hover td{background:rgba(255,255,255,.02);}
+.comp-table td:first-child{color:var(--text);font-weight:500;}
+.comp-table td:not(:first-child){font-family:var(--fm);font-size:11px;color:var(--text2);}
+.cell-al{color:var(--red)!important;font-weight:700!important;}
+.cell-ok{color:var(--green)!important;}
+.cell-wn{color:var(--orange)!important;font-weight:600!important;}
+.cell-na{color:var(--text3)!important;font-style:italic;}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;}
+.tpos{background:var(--red-s);color:var(--red);}
+.tneg{background:var(--grn-s);color:var(--green);}
+.tpnd{background:var(--tel-s);color:var(--teal);}
+
+/* TABS */
+.tab-bar{display:flex;gap:4px;margin-bottom:1.2rem;flex-wrap:wrap;}
+.tbb{padding:5px 13px;border-radius:var(--rs);background:transparent;border:1px solid var(--border);color:var(--text2);font-size:11px;cursor:pointer;font-family:var(--fb);transition:all .2s;}
+.tbb.active{background:rgba(100,181,246,.1);border-color:rgba(100,181,246,.3);color:var(--accent);}
+.tab-panel{display:none;}.tab-panel.active{display:block;}
+
+/* CHART */
+.ct{font-size:11px;color:var(--text2);margin-bottom:5px;font-weight:500;}
+.cw{position:relative;width:100%;}
+
+/* PEND */
+.pi{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid var(--border);}
+.pn{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.pu{background:var(--red-s);color:var(--red);}.pa{background:var(--ora-s);color:var(--orange);}.pm{background:var(--grn-s);color:var(--green);}
+.pt{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.pd{font-size:11px;color:var(--text2);line-height:1.5;}
+
+.it{width:100%;border-collapse:collapse;}
+.it th{font-size:10px;text-transform:uppercase;color:var(--text3);padding:6px 9px;border-bottom:1px solid var(--border);text-align:left;}
+.it td{padding:7px 9px;font-size:11px;border-bottom:1px solid var(--border);}
+.it td:first-child{color:var(--text);font-weight:500;}
+.it td:not(:first-child){color:var(--text2);font-family:var(--fm);}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;}
+.card-title{font-size:10px;font-weight:600;text-transform:uppercase;color:var(--text3);margin-bottom:.8rem;}
+
+/* AI WIDGET */
+#ai-chat-btn{position:fixed;bottom:20px;right:20px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--teal));display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:1000;box-shadow:0 4px 15px rgba(0,0,0,0.3);border:none;color:#fff;font-size:24px;transition:transform 0.2s;}
+#ai-chat-btn:hover{transform:scale(1.05);}
+#ai-panel{position:fixed;bottom:85px;right:20px;width:340px;height:480px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);z-index:1000;display:none;flex-direction:column;box-shadow:0 8px 30px rgba(0,0,0,0.5);overflow:hidden;}
+#ai-panel.open{display:flex;}
+.ai-header{padding:12px 15px;border-bottom:1px solid var(--border);background:var(--bg3);display:flex;justify-content:space-between;align-items:center;}
+.ai-title{font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px;}
+.ai-settings-btn{background:none;border:none;color:var(--text2);cursor:pointer;font-size:14px;padding:4px;}
+.ai-body{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth;}
+.ai-msg{padding:9px 13px;border-radius:var(--rs);font-size:12.5px;line-height:1.5;max-width:85%;word-wrap:break-word;}
+.ai-msg.user{background:rgba(100,181,246,0.1);color:var(--accent);align-self:flex-end;border-bottom-right-radius:2px;}
+.ai-msg.bot{background:var(--bg3);color:var(--text);align-self:flex-start;border-bottom-left-radius:2px;border:1px solid var(--border);}
+.ai-input-area{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--bg3);}
+.ai-input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:20px;outline:none;font-family:var(--fb);font-size:12px;}
+.ai-send{background:var(--accent);color:#fff;border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:bold;}
+.ai-settings{position:absolute;top:0;left:0;right:0;bottom:0;background:var(--bg2);z-index:10;display:none;flex-direction:column;padding:20px;}
+.ai-settings.open{display:flex;}
+.ai-suggestion{background:rgba(102,187,106,0.08);border:1px solid rgba(102,187,106,0.3);padding:10px;border-radius:var(--rs);margin-top:8px;}
+.ai-sugg-title{font-size:11px;font-weight:600;color:var(--green);margin-bottom:5px;text-transform:uppercase;}
+.ai-sugg-btn{background:var(--green);color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:11px;cursor:pointer;margin-right:5px;margin-top:6px;font-family:var(--fb);font-weight:500;}
+.ai-sugg-btn.reject{background:transparent;border:1px solid var(--red);color:var(--red);}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">SO</div>
+    <div><span class="nav-title">Bitácora Médica</span><span class="nav-sub">Stefani Ortiz · Unificada + IA</span></div>
+  </div>
+  <div class="nav-links">
+    <button class="nl active" onclick="goTo('hero')">Inicio</button>
+    <button class="nl" onclick="goTo('alertas')">Alertas</button>
+    <button class="nl" onclick="goTo('timeline')">Cronología</button>
+    <button class="nl" onclick="goTo('comparativa')">Comparativa</button>
+    <button class="nl" onclick="goTo('labs')">Gráficas</button>
+    <button class="nl" onclick="goTo('inmuno')">Inmuno/Hormonal</button>
+    <button class="btn-save" onclick="saveHTML()">💾 Guardar Bitácora</button>
+  </div>
+</nav>
+
+<main>
+<!-- HERO -->
+<div id="hero" class="hero">
+  <div>
+    <div class="hero-badge">Bitácora Dinámica · Actualizada Junio 2026</div>
+    <h1>Caso clínico<br><em>Stefani Ortiz</em></h1>
+    <p class="hero-sub">Documentación integral actualizada con la data de Punción Lumbar y Pico de Crisis (Oct 2025). Asistente IA activo para incorporar nuevos síntomas dinámicamente.</p>
+    <div class="hero-meta">
+      <div class="mtag">Edad <span>27 años</span></div>
+      <div class="mtag">Inicio <span>2020</span></div>
+      <div class="mtag">Dx principal <span>HII + SOP</span></div>
+      <div class="mtag">Nuevos Datos <span>18/09 y 11/10 2025</span></div>
+    </div>
+  </div>
+  <div class="status-panel">
+    <div class="sp-title">Estado actual</div>
+    <div class="sp-row"><span class="sp-label">Tolerancia esfuerzo</span><span class="sp-val s-al">Muy baja</span></div>
+    <div class="sp-row"><span class="sp-label">Temblores nocturnos</span><span class="sp-val s-al">Frecuentes ↑</span></div>
+    <div class="sp-row"><span class="sp-label">Leucocitos</span><span class="sp-val s-al">12.9 ↑</span></div>
+    <div class="sp-row"><span class="sp-label">Ferritina</span><span class="sp-val s-al">20.32 Límite crítico</span></div>
+    <div class="sp-row"><span class="sp-label">B12</span><span class="sp-val s-wn">274 Mejorando</span></div>
+    <div class="sp-row"><span class="sp-label">DHT</span><span class="sp-val s-al">51.5 Elevada</span></div>
+    <div class="sp-row"><span class="sp-label">Insulina basal</span><span class="sp-val s-al">13.1 Elevada</span></div>
+    <div class="sp-row"><span class="sp-label">LCR Celularidad</span><span class="sp-val s-wn">5.0 Límite alto (18/09)</span></div>
+  </div>
+</div>
+
+<div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
+<!-- ALERTAS -->
+<div id="alertas" style="margin-bottom:2rem;">
+  <div class="abox red">
+    <div class="at">🚨 ALERTA NUEVA — Intolerancia extrema al esfuerzo y calor (31/05/2026)</div>
+    <div class="ab">Agotamiento, dolor de pecho y cefalea en pocas horas de caminata mínima (<30 min). Descompensación debido al factor combinado de Ferritina vacía (20.32) impidiendo oxigenación adecuada, y disfunción autonómica cardiovascular (Hipotensión ortostática, taquicardia paroxística).</div>
+  </div>
+  <div class="abox red">
+    <div class="at">🚨 ALERTA CRÍTICA — Temblores nocturnos y pérdida de sensibilidad</div>
+    <div class="ab">Temblores durante el sueño que casi producen mordedura y pérdida de sensibilidad focal. Evaluación neurológica y EEG urgente descartar epilepsia nocturna o actividad desmielinizante.</div>
+  </div>
+  <div class="abox orange">
+    <div class="at">⚠️ Ferropenia Severa Confirmada en Frotis (11/10/2025)</div>
+    <div class="ab">El frotis del pico de crisis documentó Anisocitosis ++, Hipocromía ++, Dianocitos +. Con una ferritina actual de 20.32, se confirma que el déficit crónico de hierro y malabsorción es el causante estructural de la fatiga. Requiere hierro endovenoso.</div>
+  </div>
+</div>
+</div>
+
+<div class="sep"></div>
+
+<!-- CRONOLOGIA -->
+<div id="timeline" class="section">
+  <div class="sec-hdr"><span class="sec-num">01</span><h2 class="sec-title">Cronología clínica (Actualizada)</h2></div>
+  <div class="g2" style="gap:2rem;align-items:start;">
+    <div class="tl-wrap" id="tl-col-1">
+      <div class="yr-mark">2020–2025 · Antecedentes y Crisis Inicial</div>
+      <div class="tl-ev"><div class="tl-dot crisis"></div><div class="tl-date">2020–2021</div><span class="tl-badge tb-crisis">Crisis</span><div class="tl-title">COVID-19 × 6 infecciones</div><div class="tl-body">Disfunción endotelial sistémica. Insuficiencia venosa profunda MMII.</div></div>
+      <div class="tl-ev"><div class="tl-dot neuro"></div><div class="tl-date">18 Sep 2025</div><span class="tl-badge tb-neuro">Punción Lumbar</span><div class="tl-title">Análisis de LCR detallado</div><div class="tl-body">Células: 5.0 x mm3 (Límite superior). Proteínas: 27. Glucosa: 59. Pandy: Opalescente (globulinas presentes). AQP4 Suero y LCR: Negativo. Bandas Oligoclonales LCR: Negativas (Gamma 9.0%, normal). Bacteriología: Negativa.</div></div>
+      <div class="tl-ev"><div class="tl-dot crisis"></div><div class="tl-date">11-13 Oct 2025</div><span class="tl-badge tb-crisis">Pico de Crisis</span><div class="tl-title">Hb 10.4 · Leuco 20.5 · TGP 78</div><div class="tl-body">Máxima respuesta inflamatoria y microcitosis severa (VCM 64, RDW 23.4). Frotis: Anisocitosis++, Hipocromía++, Dianocitos+. Neutrófilos 71%. TGP alta en 78 y Glicemia 120. Se confirma diagnóstico de HII.</div></div>
+      <div class="tl-ev"><div class="tl-dot lab"></div><div class="tl-date">Dic 2025</div><span class="tl-badge tb-lab">Control</span><div class="tl-title">Recuperación post-crisis</div><div class="tl-body">VCM mejora a 90, TGP normalizada a 26.2 y glicemia normal. Leucocitosis residual en 12.1. Examen de orina reporta microhematuria leve (hematíes 8-10).</div></div>
+    </div>
+    
+    <div class="tl-wrap" id="tl-col-2">
+      <div class="yr-mark">2026 · Investigaciones y Eventos</div>
+      <div class="tl-ev"><div class="tl-dot inmuno"></div><div class="tl-date">Feb/Mar 2026</div><span class="tl-badge tb-inmuno">Inmunología</span><div class="tl-title">ANA 3+ · DHT 51.5 · Insulina 13.1</div><div class="tl-body">Se revela autoinmunidad activa (AC-14 CENP-F) y motor metabólico SOP descontrolado.</div></div>
+      <div class="tl-ev"><div class="tl-dot cardio"></div><div class="tl-date">16 May 2026</div><span class="tl-badge tb-cardio">Cardiología</span><div class="tl-title">Dr. Vielma — Hipotensión Ortostática</div><div class="tl-body">Taquicardia paroxística. FC aumenta +30 lpm al pararse. Ferritina 20.32. Leucocitosis reactivada (12.9).</div></div>
+      <div class="tl-ev"><div class="tl-dot crisis"></div><div class="tl-date">19 May 2026</div><span class="tl-badge tb-crisis">Ciclo Menstrual</span><div class="tl-title">Protocolo de Aislamiento</div><div class="tl-body">Menstruación abundante. Implementación de descanso casi absoluto de 2 semanas para prevenir colapso sistémico.</div></div>
+      <div class="tl-ev"><div class="tl-dot crisis"></div><div class="tl-date">31 May 2026</div><span class="tl-badge tb-crisis">Agotamiento Agudo</span><div class="tl-title">Descompensación por mínimo esfuerzo</div><div class="tl-body">Caminata <30 min y calor ambiental desencadenan agotamiento rápido, dolor cabeza y opresión torácica. Retorno prematuro a casa.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- COMPARATIVA -->
+<div id="comparativa" class="section">
+  <div class="sec-hdr"><span class="sec-num">02</span><h2 class="sec-title">Tabla Comparativa (Datos Actualizados)</h2></div>
+  <div class="tab-bar">
+    <button class="tbb active" onclick="showT('t-hemato',this)">Hematología</button>
+    <button class="tbb" onclick="showT('t-quim',this)">Química y Lípidos</button>
+  </div>
+
+  <div id="t-hemato" class="tab-panel active">
+    <div style="overflow-x:auto;">
+    <table class="comp-table">
+      <thead><tr><th>Parámetro</th><th>Referencia</th><th>11/Oct/25</th><th>13/Oct/25</th><th>30/Dic/25</th><th>30/Mar/26</th><th>16/May/26</th></tr></thead>
+      <tbody>
+        <tr><td>Hemoglobina g/dL</td><td>12.0–14.5</td><td class="cell-al">10.8</td><td class="cell-al">10.4</td><td class="cell-wn">12.5</td><td class="cell-al">11.9</td><td class="cell-wn">12.5</td></tr>
+        <tr><td>Hematocrito %</td><td>39–45</td><td class="cell-al">33.1</td><td class="cell-al">30.3</td><td class="cell-al">38.5</td><td class="cell-al">38.0</td><td class="cell-al">38.0</td></tr>
+        <tr><td>VCM fL</td><td>80–100</td><td class="cell-al">65.5 ↓↓</td><td class="cell-al">64.0 ↓↓</td><td class="cell-ok">90.0</td><td class="cell-wn">97.06 ↑</td><td class="cell-ok">89.4</td></tr>
+        <tr><td>RDW %</td><td>11.5–15.5</td><td class="cell-al">23.4 ↑↑</td><td class="cell-na">N/D</td><td class="cell-na">N/D</td><td class="cell-na">N/D</td><td class="cell-wn">15.0</td></tr>
+        <tr><td>Leucocitos ×10³</td><td>4.8–10.0</td><td class="cell-al">20.5 ↑↑</td><td class="cell-al">17.7 ↑</td><td class="cell-al">12.1 ↑</td><td class="cell-ok">9.7 ✓</td><td class="cell-al">12.9 ↑</td></tr>
+        <tr><td>Segmentados (Neut) %</td><td>55–70</td><td class="cell-al">71.0 ↑</td><td class="cell-ok">60.1</td><td class="cell-ok">60.2</td><td class="cell-ok">58</td><td class="cell-wn">69.9</td></tr>
+        <tr><td>Linfocitos %</td><td>25–40</td><td class="cell-wn">25.0</td><td class="cell-ok">32.8</td><td class="cell-ok">30.5</td><td class="cell-ok">38</td><td class="cell-ok">26.9</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div id="t-quim" class="tab-panel">
+    <div style="overflow-x:auto;">
+    <table class="comp-table">
+      <thead><tr><th>Parámetro</th><th>Referencia</th><th>11/Oct/25</th><th>13/Oct/25</th><th>30/Dic/25</th><th>30/Mar/26</th></tr></thead>
+      <tbody>
+        <tr><td>Glicemia mg/dL</td><td>70–99</td><td class="cell-al">120 ↑</td><td class="cell-ok">85</td><td class="cell-ok">93</td><td class="cell-ok">90.1</td></tr>
+        <tr><td>TGO (AST) UI/L</td><td>hasta 38</td><td class="cell-ok">30</td><td class="cell-ok">35.0</td><td class="cell-ok">19.3</td><td class="cell-ok">34.1</td></tr>
+        <tr><td>TGP (ALT) UI/L</td><td>hasta 41</td><td class="cell-al">78 ↑↑</td><td class="cell-al">45.0 ↑</td><td class="cell-ok">26.2</td><td class="cell-ok">30.9</td></tr>
+        <tr><td>Colesterol Total mg/dL</td><td>hasta 200</td><td class="cell-ok">164</td><td class="cell-ok">194</td><td class="cell-ok">156</td><td class="cell-ok">150.3</td></tr>
+        <tr><td>Proteínas Totales</td><td>6.40-8.30</td><td class="cell-ok">6.47</td><td class="cell-ok">7.6</td><td class="cell-ok">7.4</td><td class="cell-ok">6.7</td></tr>
+        <tr><td>Globulinas</td><td>2.60-3.40</td><td class="cell-al">2.47 ↓</td><td class="cell-al">3.7 ↑</td><td class="cell-ok">2.9</td><td class="cell-ok">2.4</td></tr>
+        <tr><td>Relación A/G</td><td>1.10-1.60</td><td class="cell-al">1.62 ↑</td><td class="cell-ok">1.1</td><td class="cell-ok">1.6</td><td class="cell-wn">1.79</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- GRAFICAS -->
+<div id="labs" class="section">
+  <div class="sec-hdr"><span class="sec-num">03</span><h2 class="sec-title">Evolución en Gráficas</h2></div>
+  <div class="g2">
+    <div>
+      <div class="ct">VCM fL (Marcador de Anemia: Micro 65.5 -> Macro 97 -> Normo)</div>
+      <div class="cw" style="height:220px;"><canvas id="c-vcm"></canvas></div>
+    </div>
+    <div>
+      <div class="ct">Leucocitos ×10³/µL (Pico de crisis 20.5)</div>
+      <div class="cw" style="height:220px;"><canvas id="c-leuco"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- INMUNOLOGIA E HORMONAS -->
+<div id="inmuno" class="section">
+  <div class="sec-hdr"><span class="sec-num">04</span><h2 class="sec-title">Autoinmunidad y Eje Hormonal (24/Feb/2026)</h2></div>
+  
+  <div class="g2" style="gap:1.5rem;align-items:start;">
+    <div>
+      <div class="card-title">Panel Inmunológico y Coagulación</div>
+      <table class="it">
+        <tbody>
+          <tr><td>ANA (IFI)</td><td>Positivo 3+</td><td><span class="tag tpos">AC-14 CENP-F</span></td></tr>
+          <tr><td>C3</td><td>176.6 mg/dL</td><td><span class="tag tneg">Normal</span></td></tr>
+          <tr><td>C4</td><td>34.4 mg/dL</td><td><span class="tag tneg">Normal</span></td></tr>
+          <tr><td>Anti-RNP</td><td>1.4 U/L</td><td><span class="tag tneg">Negativo</span></td></tr>
+          <tr><td>Antifosfolípido</td><td>0.8 U/L</td><td><span class="tag tneg">Negativo</span></td></tr>
+          <tr><td>Anticoagulante lúpico</td><td>Razón: 0.87</td><td><span class="tag tneg">No compatible</span></td></tr>
+          <tr><td>Anti-Cardiolipina IGM</td><td>2.78 MPLU/mL</td><td><span class="tag tneg">Negativo</span></td></tr>
+          <tr><td>Anti-Cardiolipina IGG</td><td>1.32 GPLU/mL</td><td><span class="tag tneg">Negativo</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="card-title">Panel Hormonal / Metabólico</div>
+      <table class="it">
+        <tbody>
+          <tr><td>Dihidrotestosterona (DHT)</td><td>51.5 ng/mL</td><td><span class="tag tpos">Alta (ref 5-40)</span></td></tr>
+          <tr><td>Insulina Basal</td><td>13.1 U/mL</td><td><span class="tag tpos">Alta (ref <9)</span></td></tr>
+          <tr><td>Testosterona Libre</td><td>1.2 pg/mL</td><td><span class="tag tneg">Normal</span></td></tr>
+          <tr><td>DHEA'S</td><td>78.3 mg/dL</td><td><span class="tag tneg">Normal</span></td></tr>
+        </tbody>
+      </table>
+      <div class="abox red" style="margin-top:1rem;">
+        <div class="at">Motor de la Hipertensión Intracraneana</div>
+        <div class="ab">La DHT altísima sobreestimula el plexo coroideo (producción de LCR) y la insulina alta genera resistencia y retención hídrica sistémica. Es el motor principal de la HII activa.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- DIAGNOSTICO -->
+<div id="diagnostico" class="section">
+  <div class="sec-hdr"><span class="sec-num">05</span><h2 class="sec-title">Análisis de la Descompensación</h2></div>
+  <div class="abox orange" style="margin-bottom:1.2rem;">
+    <div class="at">El ciclo destructor: ¿Por qué la intolerancia extrema al esfuerzo?</div>
+    <div class="ab">
+      El cuerpo de Stefani está operando con un "presupuesto energético" mínimo. La combinación es letal:
+      <br><br>
+      <strong>1. Factor Transporte (Anemia):</strong> Aunque la Hb está en 12.5, la Ferritina (20) significa que no hay reservas. Al hacer esfuerzo o exponerse al calor (vasodilatación), el cuerpo no puede movilizar hierro extra para oxigenar los tejidos.<br>
+      <strong>2. Factor Vascular (Disfunción Autonómica):</strong> La hipotensión ortostática documentada por el cardiólogo significa que los vasos sanguíneos no se contraen bien al estar de pie. La sangre se estanca, el corazón se acelera (Taquicardia Paroxística).<br>
+      <strong>3. Factor Hormonal (El "Peaje" Menstrual):</strong> El período que inició el 19/05 barrió con los estrógenos y agotó las pocas reservas de hierro. En la semana post-menstrual, la DHT (51.5) domina sin oposición, disparando la presión intracraneana y causando cefalea intensa.<br>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- PENDIENTES -->
+<div id="pendientes" class="section">
+  <div class="sec-hdr"><span class="sec-num">06</span><h2 class="sec-title">Plan de Acción Integral</h2></div>
+  <div class="g2" style="gap:1.5rem;align-items:start;">
+    <div>
+      <div class="pi"><div class="pn pu">1</div><div><div class="pt">Hierro Intravenoso Urgente</div><div class="pd">Ferritina en 20 no se recuperará con hierro oral.</div></div></div>
+      <div class="pi"><div class="pn pu">2</div><div><div class="pt">Neurología (EEG)</div><div class="pd">Evaluar temblores nocturnos y pérdida de sensibilidad.</div></div></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- AI WIDGET -->
+<button id="ai-chat-btn" onclick="toggleChat()">💬</button>
+
+<div id="ai-panel">
+  <div class="ai-header">
+    <div class="ai-title">🤖 Asistente Clínico IA</div>
+    <div>
+      <button class="ai-settings-btn" onclick="toggleSettings()" title="Configuración">⚙️</button>
+      <button class="ai-settings-btn" onclick="toggleChat()">✖</button>
+    </div>
+  </div>
+  
+  <div id="ai-settings" class="ai-settings">
+    <div style="font-weight:600;margin-bottom:10px;color:var(--text);">Configurar API Key</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:15px;">Para conversar necesitas tu propia API Key de Google Gemini. Tus datos no se envían a ningún servidor nuestro, van directo a Google.</div>
+    <input type="password" id="api-key-input" class="ai-input" style="margin-bottom:15px;" placeholder="AIzaSy...">
+    <button class="ai-sugg-btn" onclick="saveKey()" style="width:100%;">Guardar Key y Volver</button>
+  </div>
+
+  <div class="ai-body" id="ai-chat-history">
+    <div class="ai-msg bot">Hola, he leído la bitácora médica de Stefani (incluyendo las últimas actualizaciones de LCR y el pico de crisis). ¿Quieres reportar algún nuevo síntoma o evento? Si es relevante, te sugeriré integrarlo a la cronología.</div>
+  </div>
+
+  <div class="ai-input-area">
+    <input type="text" id="ai-input" class="ai-input" placeholder="Ej: Hoy sintió mareos intensos..." onkeypress="if(event.key==='Enter') sendMsg()">
+    <button class="ai-send" onclick="sendMsg()">➤</button>
+  </div>
+</div>
+
+<script>
+window.addEventListener('scroll',()=>{const h=document.documentElement;document.getElementById('prog').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';});
+function goTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+function showT(id,btn){
+  const tabs = btn.parentElement.parentElement.querySelectorAll('.tab-panel');
+  const btns = btn.parentElement.querySelectorAll('.tbb');
+  tabs.forEach(p=>p.classList.remove('active'));
+  btns.forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+Chart.defaults.color='#8892b0';Chart.defaults.font.family="'DM Sans',sans-serif";Chart.defaults.font.size=10;
+const gc='rgba(255,255,255,0.05)';
+const bOpts=(mn,mx)=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,backgroundColor:'#1c2540',borderColor:'rgba(255,255,255,0.1)',borderWidth:1}},scales:{x:{ticks:{font:{size:9},maxRotation:30,autoSkip:false},grid:{color:gc},border:{color:'rgba(255,255,255,0.08)'}},y:{min:mn,max:mx,ticks:{font:{size:9}},grid:{color:gc},border:{color:'rgba(255,255,255,0.08)'}}}});
+
+// VCM
+const L6=['11-Oct-25','13-Oct-25','29-Dic-25','30-Dic-25','30-Mar-26','16-May-26'];
+const ref=(v,n)=>Array(n).fill(v);
+new Chart(document.getElementById('c-vcm'),{type:'bar',data:{labels:L6,datasets:[
+  {label:'VCM',data:[65.5,64.0,91.0,90.0,97.06,89.4],backgroundColor:['#ef5350','#ef5350','#66bb6a','#66bb6a','#ffa726','#66bb6a']},
+  {label:'Mín 81',data:ref(81,6),borderColor:'rgba(255,255,255,0.25)',borderDash:[4,3],borderWidth:1,type:'line',pointRadius:0},
+  {label:'Máx 99',data:ref(99,6),borderColor:'rgba(255,255,255,0.25)',borderDash:[4,3],borderWidth:1,type:'line',pointRadius:0}
+]},options:bOpts(50,110)});
+
+// LEUCOCITOS
+new Chart(document.getElementById('c-leuco'),{type:'line',data:{labels:L6,datasets:[
+  {label:'Leucocitos',data:[20.5,17.7,12.0,12.1,9.7,12.9],borderColor:'#ef5350',backgroundColor:'rgba(239,83,80,0.07)',tension:0.3,pointRadius:5,
+   pointBackgroundColor:(ctx)=>ctx.dataIndex===4?'#66bb6a':'#ef5350',fill:true},
+  {label:'Máx 10.0',data:ref(10,6),borderColor:'#ffa726',borderDash:[4,3],borderWidth:1.5,pointRadius:0}
+]},options:bOpts(7,25)});
+
+// AI CHAT LOGIC
+let geminiKey = localStorage.getItem('gemini_key') || '';
+function toggleChat() { document.getElementById('ai-panel').classList.toggle('open'); }
+function toggleSettings() { 
+  document.getElementById('ai-settings').classList.toggle('open'); 
+  document.getElementById('api-key-input').value = geminiKey; 
+}
+function saveKey() { 
+  geminiKey = document.getElementById('api-key-input').value; 
+  localStorage.setItem('gemini_key', geminiKey); 
+  toggleSettings(); 
+}
+
+function saveHTML() {
+  const content = document.documentElement.outerHTML;
+  const blob = new Blob([content], {type: 'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'bitacora_stefani_actualizada.html';
+  a.click();
+}
+
+async function sendMsg() {
+  const input = document.getElementById('ai-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  addMsg(text, 'user');
+
+  if (!geminiKey) {
+    addMsg('⚠️ Configura tu API Key en los ajustes (icono ⚙️) primero.', 'bot');
+    return;
+  }
+  
+  const loadingId = addMsg('Analizando...', 'bot');
+  
+  const context = `Eres un asistente médico experto. Revisa el caso de Stefani Ortiz (27 años) que tiene diagnóstico de HII, SOP, autoinmunidad (ANA 3+), Ferritina crítica (20.32), disfunción autonómica (hipotensión ortostática), y pico inflamatorio pasado con Leucos 20.5 y TGP 78.
+  El usuario te cuenta una novedad. Responde con empatía y análisis. 
+  Si el dato es un nuevo síntoma o evento médico relevante, DEBES incluir al final EXACTAMENTE este bloque JSON para sugerir añadirlo a la bitácora:
+  \`\`\`json
+  {
+    "suggestion": {
+      "date": "Día Mes Año",
+      "title": "Resumen corto",
+      "body": "Descripción detallada"
+    }
+  }
+  \`\`\`
+  Si no es necesario agregarlo, solo responde normalmente.`;
+  
+  try {
+    const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + geminiKey, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: context + '\n\nUsuario: ' + text }] }] })
+    });
+    const data = await res.json();
+    if(data.error) throw new Error(data.error.message);
+    
+    let reply = data.candidates[0].content.parts[0].text;
+    let suggestion = null;
+    const jsonMatch = reply.match(/```json\n([\s\S]*?)\n```/);
+    if (jsonMatch) {
+       try {
+         const parsed = JSON.parse(jsonMatch[1]);
+         if (parsed.suggestion) suggestion = parsed.suggestion;
+         reply = reply.replace(jsonMatch[0], '');
+       } catch(e){}
+    }
+    updateMsg(loadingId, reply, suggestion);
+  } catch(e) {
+    updateMsg(loadingId, 'Error: ' + e.message);
+  }
+}
+
+function addMsg(text, type) {
+  const id = 'msg_' + Date.now();
+  const div = document.createElement('div');
+  div.className = `ai-msg ${type}`;
+  div.id = id;
+  div.innerText = text;
+  document.getElementById('ai-chat-history').appendChild(div);
+  div.parentElement.scrollTop = div.parentElement.scrollHeight;
+  return id;
+}
+
+function updateMsg(id, text, suggestion=null) {
+  const div = document.getElementById(id);
+  div.innerHTML = text.replace(/\n/g, '<br>');
+  if (suggestion) {
+    const suggDiv = document.createElement('div');
+    suggDiv.className = 'ai-suggestion';
+    suggDiv.innerHTML = `
+      <div class="ai-sugg-title">💡 Sugerir a Cronología</div>
+      <div style="font-size:11px;"><strong>${suggestion.date}</strong> - ${suggestion.title}</div>
+      <div style="font-size:10px; margin-top:4px;color:var(--text2);">${suggestion.body}</div>
+      <button class="ai-sugg-btn" onclick="acceptSugg('${suggestion.date}', '${suggestion.title}', '${suggestion.body}', this)">Aprobar</button>
+      <button class="ai-sugg-btn reject" onclick="this.parentElement.remove()">Descartar</button>
+    `;
+    div.appendChild(suggDiv);
+  }
+  div.parentElement.scrollTop = div.parentElement.scrollHeight;
+}
+
+function acceptSugg(date, title, body, btn) {
+  const wrap = document.getElementById('tl-col-2');
+  const ev = document.createElement('div');
+  ev.className = 'tl-ev new-ev';
+  ev.innerHTML = `<div class="tl-dot pend"></div><div class="tl-date">${date}</div><span class="tl-badge tb-pend">Reportado por IA</span><div class="tl-title">${title}</div><div class="tl-body">${body}</div>`;
+  wrap.appendChild(ev);
+  btn.parentElement.innerHTML = '<div class="ai-sugg-title">✅ Añadido a la cronología.<br><span style="color:var(--text2);font-weight:normal;">¡No olvides dar click en "Guardar Bitácora" arriba!</span></div>';
+}
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker Registrado!', reg))
+      .catch(err => console.error('Error registrando SW:', err));
+  });
+}
+</script>
+</body>
+</html>

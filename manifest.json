@@ -1,0 +1,16 @@
+{
+  "name": "Bitácora Médica Stefani",
+  "short_name": "Bitácora Stefani",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "description": "Bitácora Médica Personalizada de Stefani Ortiz",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
