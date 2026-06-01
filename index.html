@@ -196,6 +196,20 @@ main{padding-top:54px;}
 .nc-body td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--text2);font-family:var(--fm);}
 .nc-delete{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:4px;}
 .nc-delete:hover{color:var(--red);background:var(--red-s);}
+
+/* REPOSITORIO */
+.repo-bar{display:flex;gap:10px;margin-bottom:1rem;}
+.repo-search{flex-grow:1;padding:8px 12px;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);color:var(--text);font-family:var(--fb);font-size:12px;outline:none;}
+.repo-search:focus{border-color:var(--accent);}
+.repo-cat-btn{padding:8px 12px;border-radius:var(--r);background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:11px;white-space:nowrap;transition:all .2s;}
+.repo-cat-btn.active{background:rgba(100,181,246,.1);border-color:rgba(100,181,246,.3);color:var(--accent);}
+.repo-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:15px;margin-top:1rem;}
+.r-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1rem;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:5px;text-decoration:none;}
+.r-card:hover{border-color:var(--accent);transform:translateY(-2px);background:var(--bg3);}
+.rc-cat{font-size:9px;text-transform:uppercase;color:var(--text3);font-weight:700;}
+.rc-title{font-size:12px;font-weight:600;color:var(--text);line-height:1.3;}
+.rc-date{font-size:10px;color:var(--text2);font-family:var(--fm);}
+.rc-icon{font-size:24px;margin-bottom:5px;}
 </style>
 </head>
 <body>
@@ -212,6 +226,7 @@ main{padding-top:54px;}
     <button class="nl" onclick="goTo('timeline')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Cronología</button>
     <button class="nl" onclick="goTo('sintomas')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
     <button class="nl" onclick="goTo('comparativa')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Resultados</button>
+    <button class="nl" onclick="goTo('repositorio')"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>Archivo</button>
     <button class="btn-save" onclick="saveHTML()">💾 Guardar</button>
   </div>
 </nav>
@@ -221,6 +236,7 @@ main{padding-top:54px;}
   <button class="mn-btn" onclick="goTo('timeline'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Crono</button>
   <button class="mn-btn" onclick="goTo('sintomas'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
   <button class="mn-btn" onclick="goTo('comparativa'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Labs</button>
+  <button class="mn-btn" onclick="goTo('repositorio'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>Archivo</button>
   <button class="mn-btn" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>IA</button>
 </div>
 
@@ -471,21 +487,40 @@ main{padding-top:54px;}
   <div class="sec-hdr"><span class="sec-num">08</span><h2 class="sec-title">Síntomas Emergentes en Vigilancia</h2></div>
   <div class="g2">
     <div class="abox red">
-      <div class="at">Temblores nocturnos</div>
-      <div class="ab">Temblores durante el sueño. Frecuencia en aumento. Riesgo de mordedura. Evaluar posible actividad epiléptica.</div>
+      <div class="at">Temblores nocturnos esporádicos</div>
+      <div class="ab">Iniciaron posterior a la Punción Lumbar. Temblores durante el sueño (casi mordedura). Riesgo neurológico, evaluar origen (posible actividad epiléptica).</div>
     </div>
     <div class="abox red">
       <div class="at">Pérdida de sensibilidad focal</div>
-      <div class="ab">Afectando principalmente el pie izquierdo. Requiere evaluación neurológica urgente.</div>
+      <div class="ab">Afecta principalmente el pie izquierdo, pero con extensión ocasional a las manos. Requiere evaluación neurológica (neuropatía periférica vs desmielinización).</div>
     </div>
     <div class="abox orange">
-      <div class="at">Sudoración nocturna profusa</div>
-      <div class="ab">Presente desde hace aproximadamente 1 año. Relacionado posible componente autonómico.</div>
+      <div class="at">Falla térmica / Sudoración nocturna</div>
+      <div class="ab">Sudoración profunda presente desde mediados de 2025. Actualmente evolucionando a problemas más evidentes de disautonomía en la regulación de la temperatura corporal.</div>
     </div>
     <div class="abox orange">
       <div class="at">Intolerancia al calor/esfuerzo</div>
-      <div class="ab">Marcada desde el 31/05/2026. Descompensación rápida con mínimo esfuerzo.</div>
+      <div class="ab">Marcada desde el 31/05/2026. Descompensación rápida con mínimo esfuerzo, vinculada a ferropenia severa (Ferritina 20) y POTS.</div>
     </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- REPOSITORIO -->
+<div id="repositorio" class="section">
+  <div class="sec-hdr"><span class="sec-num">09</span><h2 class="sec-title">Archivo Médico (Repositorio)</h2></div>
+  <p style="color:var(--text2);font-size:12px;margin-bottom:1.5rem;">Carpeta de evidencias clínicas. Copia tus PDFs e imágenes en la carpeta <code>/archivos</code> del código para tenerlos disponibles aquí.</p>
+  
+  <div class="repo-bar">
+    <input type="text" id="repo-search-input" class="repo-search" placeholder="🔍 Buscar por examen, laboratorio o fecha..." onkeyup="filterRepo()">
+  </div>
+  <div class="repo-bar" style="overflow-x:auto;padding-bottom:5px;" id="repo-cats">
+    <!-- Insertado via JS -->
+  </div>
+
+  <div id="repo-grid" class="repo-grid">
+    <!-- Tarjetas insertadas via JS -->
   </div>
 </div>
 
@@ -684,7 +719,70 @@ function renderSymptomChart() {
     options: bOpts(0, 10)
   });
 // Initial render
-window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); });
+window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); renderRepoCats(); filterRepo(); });
+
+// REPOSITORIO LOGIC
+const repoFiles = [
+  { title: 'Bitácora Médica Octubre 2025', date: '20/Oct/2025', cat: 'Bitácora', file: 'archivos/BITACORA MEDICA _ Act. al 20-10-25/Bitácora Médica_ actualizada Stefani octubre 2025.docx', type: 'doc' },
+  { title: 'Hematología', date: '13/Oct/2025', cat: 'Hematología y Química', file: 'archivos/LABS_ Briseño/Hematologia 13_10_2025.pdf', type: 'pdf' },
+  { title: 'Hematología + Orina', date: '05/Oct/2025', cat: 'Hematología y Química', file: 'archivos/LABS_ Briseño/hematologia + orina 05_10_2025.pdf', type: 'pdf' },
+  { title: 'Hematología + Orina', date: '29/Dic/2025', cat: 'Hematología y Química', file: 'archivos/LABS_ Briseño/hematologia + orina 29_12_2025.pdf', type: 'pdf' },
+  { title: 'Hematología', date: '30/Dic/2025', cat: 'Hematología y Química', file: 'archivos/LABS_ Briseño/hematologia 30_12_2025.pdf', type: 'pdf' },
+  { title: 'Líquido Cefalorraquídeo', date: '08/Oct/2025', cat: 'Neurología', file: 'archivos/LCR/Liquido cefaloraquidio 08_10_2025.pdf', type: 'pdf' },
+  { title: 'C3, C4, DHEA-S, Anti-RNP, Antifosfolípido', date: '24/Feb/2026', cat: 'Inmunología', file: 'archivos/Laboratorios e informes Médicos/ c3,c4,DEAH_s, ANTI RNP , Anti fosfolipido 24_02_2026 _ MADRE EMILIA  .jpeg', type: 'img' },
+  { title: 'Insulina Basal', date: '24/Feb/2026', cat: 'Endocrinología', file: 'archivos/Laboratorios e informes Médicos/Insulina Basal 24_02_2026 _ MADRE EMILIA  .jpeg', type: 'img' },
+  { title: 'Perfil Reumatoideo UCV', date: '10/Feb/2026', cat: 'Inmunología', file: 'archivos/Laboratorios e informes Médicos/Perfil reumatoideo UCV 10_02_2026.jpeg', type: 'img' },
+  { title: 'Testosterona Libre + DHT', date: '24/Feb/2026', cat: 'Endocrinología', file: 'archivos/Laboratorios e informes Médicos/Testosterona libre + DHT 24_02_2026 _ MADRE EMILIA  .jpeg', type: 'img' },
+  { title: 'Hematología (Detalle 1)', date: '30/Mar/2026', cat: 'Hematología y Química', file: 'archivos/Laboratorios e informes Médicos/hematologia detalle 30_03_2026 _ MADRE EMILIA  (1).jpeg', type: 'img' },
+  { title: 'Hematología (Detalle 2)', date: '30/Mar/2026', cat: 'Hematología y Química', file: 'archivos/Laboratorios e informes Médicos/hematologia detalle 30_03_2026 _ MADRE EMILIA  .jpeg', type: 'img' },
+  { title: 'Hematología (Detalle 3)', date: '30/Mar/2026', cat: 'Hematología y Química', file: 'archivos/Laboratorios e informes Médicos/hematologia detalle 30_03_2026_ MADRE EMILIA  .jpeg', type: 'img' },
+  { title: 'Anticoagulante Lúpico UCV', date: '17/Mar/2026', cat: 'Inmunología', file: 'archivos/MEDICINA TROPICAL UCV _ ANTICOAGULANTE LUPICO/ANTICOAGULANTE LUPICO 17_03_2026.pdf', type: 'pdf' },
+  { title: 'Perfil Ferrocinético', date: '26/May/2026', cat: 'Hematología y Química', file: 'archivos/Perfil ferrocinetico mayo 2026/ferrocinetico 26_05_2026.pdf', type: 'pdf' },
+  { title: 'Historial Médico al 15/Oct/2025', date: '15/Oct/2025', cat: 'Informes y Órdenes', file: 'archivos/informes/Historial Medico SMOS al 15_10_25.pdf', type: 'pdf' }
+];
+
+let activeRepoCat = 'Todos';
+
+function renderRepoCats() {
+  const cats = ['Todos', ...new Set(repoFiles.map(f => f.cat))];
+  const container = document.getElementById('repo-cats');
+  if(!container) return;
+  container.innerHTML = cats.map(c => 
+    `<button class="repo-cat-btn ${c===activeRepoCat?'active':''}" onclick="setRepoCat('${c}')">${c}</button>`
+  ).join('');
+}
+
+function setRepoCat(cat) {
+  activeRepoCat = cat;
+  renderRepoCats();
+  filterRepo();
+}
+
+function filterRepo() {
+  const term = document.getElementById('repo-search-input').value.toLowerCase();
+  const grid = document.getElementById('repo-grid');
+  if(!grid) return;
+  
+  const filtered = repoFiles.filter(f => {
+    const matchCat = activeRepoCat === 'Todos' || f.cat === activeRepoCat;
+    const matchTerm = f.title.toLowerCase().includes(term) || f.date.toLowerCase().includes(term) || f.cat.toLowerCase().includes(term);
+    return matchCat && matchTerm;
+  });
+
+  if(filtered.length === 0) {
+    grid.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:2rem;">No se encontraron archivos en el buscador.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(f => `
+    <a href="${f.file}" target="_blank" class="r-card">
+      <div class="rc-icon">${f.type==='pdf'?'📄':'🖼️'}</div>
+      <div class="rc-cat">${f.cat}</div>
+      <div class="rc-title">${f.title}</div>
+      <div class="rc-date">📅 ${f.date}</div>
+    </a>
+  `).join('');
+}
 
 async function handleImageUpload(event) {
   const file = event.target.files[0];
