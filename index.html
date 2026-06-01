@@ -600,7 +600,7 @@ Nota: intensity debe ser un número del 1 al 10. No uses el bloque JSON si solo 
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
       body: JSON.stringify({ 
-        model: 'llama3-70b-8192', 
+        model: 'llama3-8b-8192', 
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: text }
