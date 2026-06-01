@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stefani-med-cache-v3';
+const CACHE_NAME = 'stefani-med-cache-v4';
 const urlsToCache = [
   './index.html',
   './manifest.json',
@@ -16,15 +16,16 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Return cached response if found
-        if (response) {
-          return response;
-        }
-        // Fallback to network
-        return fetch(event.request);
-      })
+    fetch(event.request).then(response => {
+      // Return network response and update cache
+      return caches.open(CACHE_NAME).then(cache => {
+        cache.put(event.request, response.clone());
+        return response;
+      });
+    }).catch(() => {
+      // If network fails, return cached response
+      return caches.match(event.request);
+    })
   );
 });
 
