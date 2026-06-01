@@ -22,12 +22,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,14,26,0.9
 .nav-title{font-family:var(--fd);font-size:14px;}
 .nav-sub{font-size:11px;color:var(--text2);margin-left:4px;}
 .nav-links{display:flex;gap:3px;flex-wrap:wrap;}
-.nl{padding:4px 10px;border-radius:var(--rs);color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;border:none;background:transparent;transition:all .2s;}
+.nl{padding:4px 10px;border-radius:var(--rs);color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;border:none;background:transparent;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.nl svg{width:14px;height:14px;fill:currentColor;}
 .nl:hover{color:var(--text);background:var(--bg3);}
 .nl.active{color:var(--accent);background:rgba(100,181,246,0.1);}
 .btn-save{background:rgba(102,187,106,0.15);color:var(--green);border:1px solid rgba(102,187,106,0.3);padding:4px 10px;border-radius:var(--rs);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;}
 .btn-save:hover{background:var(--green);color:#fff;}
 .prog{position:fixed;top:54px;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--teal));z-index:99;width:0%;transition:width .1s;}
+
+/* Mobile Bottom Nav */
+@media(max-width:768px){
+  nav{display:none;}
+  .mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;height:60px;background:rgba(15,21,36,0.96);backdrop-filter:blur(15px);border-top:1px solid var(--border);z-index:900;justify-content:space-around;align-items:center;padding-bottom:env(safe-area-inset-bottom);}
+  .mn-btn{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text2);background:none;border:none;font-size:10px;font-family:var(--fb);cursor:pointer;font-weight:500;}
+  .mn-btn svg{width:20px;height:20px;fill:currentColor;}
+  .mn-btn.active{color:var(--accent);}
+  main{padding-top:20px;padding-bottom:80px;}
+  #ai-chat-btn{bottom:80px !important;}
+  #ai-panel{bottom:150px !important;max-height:60vh;right:10px !important;left:10px !important;width:auto !important;}
+}
+@media(min-width:769px){ .mobile-nav{display:none;} }
 
 main{padding-top:54px;}
 
@@ -62,7 +76,7 @@ main{padding-top:54px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 @media(max-width:900px){.g4{grid-template-columns:repeat(3,1fr);}.hero{grid-template-columns:1fr;}}
-@media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr 1fr;}.hero h1{font-size:2rem;}.nav-links{display:none;}}
+@media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr;}.hero h1{font-size:2rem;}}
 @media(max-width:380px){.g2,.g3,.g4{grid-template-columns:1fr;}}
 
 /* ALERT BOXES */
@@ -176,15 +190,22 @@ main{padding-top:54px;}
     <div><span class="nav-title">Bitácora Médica</span><span class="nav-sub">Stefani Ortiz · Unificada + IA</span></div>
   </div>
   <div class="nav-links">
-    <button class="nl active" onclick="goTo('hero')">Inicio</button>
-    <button class="nl" onclick="goTo('alertas')">Alertas</button>
-    <button class="nl" onclick="goTo('timeline')">Cronología</button>
-    <button class="nl" onclick="goTo('comparativa')">Comparativa</button>
-    <button class="nl" onclick="goTo('labs')">Gráficas</button>
-    <button class="nl" onclick="goTo('inmuno')">Inmuno/Hormonal</button>
-    <button class="btn-save" onclick="saveHTML()">💾 Guardar Bitácora</button>
+    <button class="nl active" onclick="goTo('hero')"><svg viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-14v-9h-3z"/></svg>Inicio</button>
+    <button class="nl" onclick="goTo('alertas')"><svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.83L19.5 19h-15L12 5.83zM11 10v5h2v-5h-2zm0 7v2h2v-2h-2z"/></svg>Alertas</button>
+    <button class="nl" onclick="goTo('timeline')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Cronología</button>
+    <button class="nl" onclick="goTo('sintomas')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
+    <button class="nl" onclick="goTo('comparativa')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Resultados</button>
+    <button class="btn-save" onclick="saveHTML()">💾 Guardar</button>
   </div>
 </nav>
+
+<div class="mobile-nav">
+  <button class="mn-btn active" onclick="goTo('hero'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-14v-9h-3z"/></svg>Inicio</button>
+  <button class="mn-btn" onclick="goTo('timeline'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Crono</button>
+  <button class="mn-btn" onclick="goTo('sintomas'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
+  <button class="mn-btn" onclick="goTo('comparativa'); document.querySelectorAll('.mn-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Labs</button>
+  <button class="mn-btn" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>IA</button>
+</div>
 
 <main>
 <!-- HERO -->
@@ -360,9 +381,30 @@ main{padding-top:54px;}
 
 <div class="sep"></div>
 
+<!-- SINTOMATOLOGIA -->
+<div id="sintomas" class="section">
+  <div class="sec-hdr"><span class="sec-num">05</span><h2 class="sec-title">Sintomatología y Patrones</h2></div>
+  <p style="color:var(--text2);font-size:12px;margin-bottom:1.5rem;">Registro evolutivo de síntomas ingresados a través del Asistente Clínico.</p>
+  
+  <div class="g2" style="align-items:start;">
+    <div>
+      <div class="card-title">Evolución de Intensidad</div>
+      <div class="cw" style="height:220px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;"><canvas id="c-sintomas"></canvas></div>
+    </div>
+    <div>
+      <div class="card-title">Últimos Registros (Memoria Local)</div>
+      <div id="sintomas-list" style="max-height:220px;overflow-y:auto;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;font-size:11px;">
+        <div style="color:var(--text3);font-style:italic;text-align:center;padding:20px 0;">No hay síntomas registrados aún.<br>Habla con la IA para empezar.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
 <!-- DIAGNOSTICO -->
 <div id="diagnostico" class="section">
-  <div class="sec-hdr"><span class="sec-num">05</span><h2 class="sec-title">Análisis de la Descompensación</h2></div>
+  <div class="sec-hdr"><span class="sec-num">06</span><h2 class="sec-title">Análisis de la Descompensación</h2></div>
   <div class="abox orange" style="margin-bottom:1.2rem;">
     <div class="at">El ciclo destructor: ¿Por qué la intolerancia extrema al esfuerzo?</div>
     <div class="ab">
@@ -379,7 +421,7 @@ main{padding-top:54px;}
 
 <!-- PENDIENTES -->
 <div id="pendientes" class="section">
-  <div class="sec-hdr"><span class="sec-num">06</span><h2 class="sec-title">Plan de Acción Integral</h2></div>
+  <div class="sec-hdr"><span class="sec-num">07</span><h2 class="sec-title">Plan de Acción Integral</h2></div>
   <div class="g2" style="gap:1.5rem;align-items:start;">
     <div>
       <div class="pi"><div class="pn pu">1</div><div><div class="pt">Hierro Intravenoso Urgente</div><div class="pd">Ferritina en 20 no se recuperará con hierro oral.</div></div></div>
@@ -451,28 +493,71 @@ new Chart(document.getElementById('c-leuco'),{type:'line',data:{labels:L6,datase
   {label:'Máx 10.0',data:ref(10,6),borderColor:'#ffa726',borderDash:[4,3],borderWidth:1.5,pointRadius:0}
 ]},options:bOpts(7,25)});
 
-// AI CHAT LOGIC
-let geminiKey = localStorage.getItem('gemini_key') || '';
+// AI CHAT & SYMPTOM LOGIC
+let groqKey = localStorage.getItem('groq_key') || '';
+let symptomsLog = JSON.parse(localStorage.getItem('stefani_symptoms') || '[]');
+
 function toggleChat() { document.getElementById('ai-panel').classList.toggle('open'); }
 function toggleSettings() { 
   document.getElementById('ai-settings').classList.toggle('open'); 
-  document.getElementById('api-key-input').value = geminiKey; 
+  document.getElementById('api-key-input').value = groqKey; 
 }
 function saveKey() { 
-  geminiKey = document.getElementById('api-key-input').value; 
-  localStorage.setItem('gemini_key', geminiKey); 
+  groqKey = document.getElementById('api-key-input').value; 
+  localStorage.setItem('groq_key', groqKey); 
   toggleSettings(); 
 }
 
 function saveHTML() {
   const content = document.documentElement.outerHTML;
   const blob = new Blob([content], {type: 'text/html'});
-  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
+  a.href = URL.createObjectURL(blob);
   a.download = 'bitacora_stefani_actualizada.html';
   a.click();
 }
+
+function renderSymptoms() {
+  const list = document.getElementById('sintomas-list');
+  if(!list) return;
+  if(symptomsLog.length === 0) {
+    list.innerHTML = '<div style="color:var(--text3);font-style:italic;text-align:center;padding:20px 0;">No hay síntomas registrados aún.<br>Habla con la IA para empezar.</div>';
+    return;
+  }
+  list.innerHTML = symptomsLog.slice().reverse().map(s => `
+    <div style="padding:8px 0;border-bottom:1px solid var(--border);">
+      <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+        <strong style="color:var(--text);font-size:12px;">${s.title}</strong>
+        <span class="tag ${s.intensity >= 7 ? 'tpos' : (s.intensity >= 4 ? 'tpnd' : 'tneg')}">Intensidad: ${s.intensity}/10</span>
+      </div>
+      <div style="color:var(--text3);font-size:9px;font-family:var(--fm);margin-bottom:4px;">${new Date(s.timestamp).toLocaleString()}</div>
+      <div style="color:var(--text2);">${s.body}</div>
+    </div>
+  `).join('');
+
+  renderSymptomChart();
+}
+
+let sympChart = null;
+function renderSymptomChart() {
+  const ctx = document.getElementById('c-sintomas');
+  if(!ctx) return;
+  if(sympChart) sympChart.destroy();
+  const recent = symptomsLog.slice(-10); // Last 10
+  const labels = recent.map(s => new Date(s.timestamp).toLocaleDateString(undefined, {month:'short', day:'numeric'}));
+  const data = recent.map(s => s.intensity);
+  
+  sympChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets: [{
+      label: 'Intensidad', data, borderColor: '#ab47bc', backgroundColor: 'rgba(171,71,188,0.1)',
+      tension: 0.4, pointRadius: 4, fill: true
+    }]},
+    options: bOpts(0, 10)
+  });
+}
+// Initial render
+window.addEventListener('load', renderSymptoms);
 
 async function sendMsg() {
   const input = document.getElementById('ai-input');
@@ -481,49 +566,61 @@ async function sendMsg() {
   input.value = '';
   addMsg(text, 'user');
 
-  if (!geminiKey) {
-    addMsg('⚠️ Configura tu API Key en los ajustes (icono ⚙️) primero.', 'bot');
+  if (!groqKey) {
+    addMsg('⚠️ Configura tu API Key de Groq en los ajustes (icono ⚙️) primero.', 'bot');
     return;
   }
   
-  const loadingId = addMsg('Analizando...', 'bot');
+  const loadingId = addMsg('Analizando patrones...', 'bot');
   
-  const context = `Eres un asistente médico experto. Revisa el caso de Stefani Ortiz (27 años) que tiene diagnóstico de HII, SOP, autoinmunidad (ANA 3+), Ferritina crítica (20.32), disfunción autonómica (hipotensión ortostática), y pico inflamatorio pasado con Leucos 20.5 y TGP 78.
-  El usuario te cuenta una novedad. Responde con empatía y análisis. 
-  Si el dato es un nuevo síntoma o evento médico relevante, DEBES incluir al final EXACTAMENTE este bloque JSON para sugerir añadirlo a la bitácora:
-  \`\`\`json
-  {
-    "suggestion": {
-      "date": "Día Mes Año",
-      "title": "Resumen corto",
-      "body": "Descripción detallada"
-    }
+  const historyContext = symptomsLog.slice(-5).map(s => `[${new Date(s.timestamp).toLocaleDateString()}] ${s.title} (Intensidad: ${s.intensity}/10) - ${s.body}`).join('\\n');
+
+  const systemPrompt = `Actúas como un asistente de acompañamiento médico digital. Tu objetivo es recopilar sintomatología de forma precisa y objetiva, manteniendo un tono cálido, humano y empático, pero estrictamente clínico en tus conclusiones. Regla de oro: No valides diagnósticos catastrofistas del usuario. Si el usuario muestra ansiedad o paranoia, valida su emoción ("Lamento que te sientas así"), pero redirige inmediatamente la atención hacia los hechos y datos medibles. Utiliza el historial del paciente para contextualizar, buscando patrones en lugar de eventos aislados. Nunca generes falsas alarmas, pero mantén un umbral estricto para recomendar la consulta con su médico real si detectas signos de alerta.
+
+Contexto del paciente: Stefani Ortiz (27), HII, SOP, autoinmunidad (ANA 3+), Ferritina crítica (20), disfunción autonómica.
+Historial reciente de síntomas reportados:
+${historyContext || "Ninguno reciente."}
+
+Si el usuario reporta un síntoma nuevo, SIEMPRE incluye al final de tu respuesta EXACTAMENTE este bloque JSON para registrarlo en la bitácora:
+\`\`\`json
+{
+  "symptom": {
+    "title": "Nombre corto del síntoma",
+    "intensity": 5, 
+    "body": "Descripción objetiva del síntoma y contexto"
   }
-  \`\`\`
-  Si no es necesario agregarlo, solo responde normalmente.`;
+}
+\`\`\`
+Nota: intensity debe ser un número del 1 al 10. No uses el bloque JSON si solo están conversando y no hay síntomas nuevos para registrar.`;
   
   try {
-    const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + geminiKey, {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: context + '\n\nUsuario: ' + text }] }] })
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
+      body: JSON.stringify({ 
+        model: 'llama3-70b-8192', 
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: text }
+        ] 
+      })
     });
     const data = await res.json();
     if(data.error) throw new Error(data.error.message);
     
-    let reply = data.candidates[0].content.parts[0].text;
-    let suggestion = null;
+    let reply = data.choices[0].message.content;
+    let symptom = null;
     const jsonMatch = reply.match(/```json\n([\s\S]*?)\n```/);
     if (jsonMatch) {
        try {
          const parsed = JSON.parse(jsonMatch[1]);
-         if (parsed.suggestion) suggestion = parsed.suggestion;
+         if (parsed.symptom) symptom = parsed.symptom;
          reply = reply.replace(jsonMatch[0], '');
        } catch(e){}
     }
-    updateMsg(loadingId, reply, suggestion);
+    updateMsg(loadingId, reply, symptom);
   } catch(e) {
-    updateMsg(loadingId, 'Error: ' + e.message);
+    updateMsg(loadingId, 'Error de conexión: ' + e.message);
   }
 }
 
@@ -538,17 +635,17 @@ function addMsg(text, type) {
   return id;
 }
 
-function updateMsg(id, text, suggestion=null) {
+function updateMsg(id, text, symptom=null) {
   const div = document.getElementById(id);
   div.innerHTML = text.replace(/\n/g, '<br>');
-  if (suggestion) {
+  if (symptom) {
     const suggDiv = document.createElement('div');
     suggDiv.className = 'ai-suggestion';
     suggDiv.innerHTML = `
-      <div class="ai-sugg-title">💡 Sugerir a Cronología</div>
-      <div style="font-size:11px;"><strong>${suggestion.date}</strong> - ${suggestion.title}</div>
-      <div style="font-size:10px; margin-top:4px;color:var(--text2);">${suggestion.body}</div>
-      <button class="ai-sugg-btn" onclick="acceptSugg('${suggestion.date}', '${suggestion.title}', '${suggestion.body}', this)">Aprobar</button>
+      <div class="ai-sugg-title">📊 Registrar Síntoma</div>
+      <div style="font-size:11px;"><strong>${symptom.title}</strong> (Intensidad: ${symptom.intensity}/10)</div>
+      <div style="font-size:10px; margin-top:4px;color:var(--text2);">${symptom.body}</div>
+      <button class="ai-sugg-btn" onclick="acceptSymptom('${symptom.title.replace(/'/g,"\\'").replace(/"/g,"&quot;")}', ${symptom.intensity}, '${symptom.body.replace(/'/g,"\\'").replace(/"/g,"&quot;")}', this)">Guardar en Memoria</button>
       <button class="ai-sugg-btn reject" onclick="this.parentElement.remove()">Descartar</button>
     `;
     div.appendChild(suggDiv);
@@ -556,13 +653,16 @@ function updateMsg(id, text, suggestion=null) {
   div.parentElement.scrollTop = div.parentElement.scrollHeight;
 }
 
-function acceptSugg(date, title, body, btn) {
-  const wrap = document.getElementById('tl-col-2');
-  const ev = document.createElement('div');
-  ev.className = 'tl-ev new-ev';
-  ev.innerHTML = `<div class="tl-dot pend"></div><div class="tl-date">${date}</div><span class="tl-badge tb-pend">Reportado por IA</span><div class="tl-title">${title}</div><div class="tl-body">${body}</div>`;
-  wrap.appendChild(ev);
-  btn.parentElement.innerHTML = '<div class="ai-sugg-title">✅ Añadido a la cronología.<br><span style="color:var(--text2);font-weight:normal;">¡No olvides dar click en "Guardar Bitácora" arriba!</span></div>';
+function acceptSymptom(title, intensity, body, btn) {
+  symptomsLog.push({ 
+    title, 
+    intensity: parseInt(intensity), 
+    body, 
+    timestamp: Date.now() 
+  });
+  localStorage.setItem('stefani_symptoms', JSON.stringify(symptomsLog));
+  renderSymptoms();
+  btn.parentElement.innerHTML = '<div class="ai-sugg-title">✅ Síntoma guardado en tu historial local.</div>';
 }
 </script>
 <script>
