@@ -9,6 +9,7 @@
 <link rel="apple-touch-icon" href="icon.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#0a0e1a;--bg2:#0f1524;--bg3:#161d30;--bg4:#1c2540;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8eaf2;--text2:#8892b0;--text3:#4a5568;--accent:#64b5f6;--red:#ef5350;--red-s:rgba(239,83,80,0.12);--orange:#ffa726;--ora-s:rgba(255,167,38,0.12);--green:#66bb6a;--grn-s:rgba(102,187,106,0.12);--purple:#ab47bc;--pur-s:rgba(171,71,188,0.12);--teal:#26c6da;--tel-s:rgba(38,198,218,0.1);--fd:'DM Serif Display',Georgia,serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace;--r:12px;--rs:8px;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -615,6 +616,29 @@ let geminiKey = localStorage.getItem('gemini_key') || '';
 let symptomsLog = JSON.parse(localStorage.getItem('stefani_symptoms') || '[]');
 let neutronNotes = JSON.parse(localStorage.getItem('neutron_notes') || '[]');
 
+const supaUrl = 'https://jksxabgobzfobrvpiuyn.supabase.co';
+const supaKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprc3hhYmdvYnpmb2JydnBpdXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDI3NzMsImV4cCI6MjA5NTg3ODc3M30.ul37DG1R46jMQQoWGM3GtsQ7KzsXOfnpxWKekGQkseA';
+const supabase = window.supabase.createClient(supaUrl, supaKey);
+
+async function loadSupabaseData() {
+  const { data: symData } = await supabase.from('symptoms').select('*').order('timestamp', { ascending: true });
+  if (symData && symData.length > 0) {
+    symptomsLog = symData.map(s => ({ ...s, timestamp: new Date(s.timestamp).getTime() }));
+  } else if (symptomsLog.length > 0) {
+    await supabase.from('symptoms').insert(symptomsLog.map(s => ({ title: s.title, body: s.body, intensity: s.intensity, timestamp: new Date(s.timestamp).toISOString() })));
+  }
+
+  const { data: neuData } = await supabase.from('neutron_notes').select('*').order('timestamp', { ascending: true });
+  if (neuData && neuData.length > 0) {
+    neutronNotes = neuData.map(n => ({ ...n, timestamp: new Date(n.timestamp).getTime() }));
+  } else if (neutronNotes.length > 0) {
+    await supabase.from('neutron_notes').insert(neutronNotes.map(n => ({ title: n.title, html: n.html, timestamp: new Date(n.timestamp).toISOString() })));
+  }
+
+  renderSymptoms();
+  renderNeutronNotes();
+}
+
 function toggleChat() { document.getElementById('ai-panel').classList.toggle('open'); }
 function toggleSettings() { 
   document.getElementById('ai-settings').classList.toggle('open'); 
@@ -659,16 +683,25 @@ function renderNeutronNotes() {
 }
 
 function deleteNote(idx) {
+  const note = neutronNotes[idx];
   neutronNotes.splice(idx, 1);
-  localStorage.setItem('neutron_notes', JSON.stringify(neutronNotes));
   renderNeutronNotes();
+  if (note.id) {
+    supabase.from('neutron_notes').delete().eq('id', note.id).then(()=>{});
+  }
 }
 
-function saveNeutronNote(title, html) {
-  neutronNotes.push({ title, html, timestamp: Date.now() });
-  localStorage.setItem('neutron_notes', JSON.stringify(neutronNotes));
+async function saveNeutronNote(title, html) {
+  const timestamp = new Date().toISOString();
+  const localNote = { title, html, timestamp: new Date(timestamp).getTime() };
+  neutronNotes.push(localNote);
   renderNeutronNotes();
   document.getElementById('neutron-notes-wrapper').scrollIntoView({behavior:'smooth'});
+  
+  const { data } = await supabase.from('neutron_notes').insert([{ title, html, timestamp }]).select();
+  if (data && data[0]) {
+    neutronNotes[neutronNotes.length - 1] = { ...data[0], timestamp: new Date(data[0].timestamp).getTime() };
+  }
 }
 
 function saveHTML() {
@@ -719,7 +752,7 @@ function renderSymptomChart() {
     options: bOpts(0, 10)
   });
 // Initial render
-window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); renderRepoCats(); filterRepo(); });
+window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); renderRepoCats(); filterRepo(); loadSupabaseData(); });
 
 // REPOSITORIO LOGIC
 const repoFiles = [
@@ -902,11 +935,17 @@ function updateMsg(id, text, symptom=null, neutronCard=null) {
   div.parentElement.scrollTop = div.parentElement.scrollHeight;
 }
 
-function acceptSymptom(title, intensity, body, btn) {
-  symptomsLog.push({ title, intensity: parseInt(intensity), body, timestamp: Date.now() });
-  localStorage.setItem('stefani_symptoms', JSON.stringify(symptomsLog));
+async function acceptSymptom(title, intensity, body, btn) {
+  const timestamp = new Date().toISOString();
+  const localSymptom = { title, intensity: parseInt(intensity), body, timestamp: new Date(timestamp).getTime() };
+  symptomsLog.push(localSymptom);
   renderSymptoms();
-  btn.parentElement.innerHTML = '<div class="ai-sugg-title">✅ Síntoma guardado en tu historial local.</div>';
+  btn.parentElement.innerHTML = '<div class="ai-sugg-title">✅ Síntoma guardado en la Nube ☁️</div>';
+  
+  const { data } = await supabase.from('symptoms').insert([{ title, intensity: parseInt(intensity), body, timestamp }]).select();
+  if (data && data[0]) {
+    symptomsLog[symptomsLog.length - 1] = { ...data[0], timestamp: new Date(data[0].timestamp).getTime() };
+  }
 }
 
 function acceptNeutronCard(btn, title, html) {
