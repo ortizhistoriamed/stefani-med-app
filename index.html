@@ -301,20 +301,21 @@ main{padding-top:54px;}
   <div class="tab-bar">
     <button class="tbb active" onclick="showT('t-hemato',this)">Hematología</button>
     <button class="tbb" onclick="showT('t-quim',this)">Química y Lípidos</button>
+    <button class="tbb" onclick="showT('t-hierro',this)">Perfil Hierro y Vit</button>
   </div>
 
   <div id="t-hemato" class="tab-panel active">
     <div style="overflow-x:auto;">
     <table class="comp-table">
-      <thead><tr><th>Parámetro</th><th>Referencia</th><th>11/Oct/25</th><th>13/Oct/25</th><th>30/Dic/25</th><th>30/Mar/26</th><th>16/May/26</th></tr></thead>
+      <thead><tr><th>Parámetro</th><th>Referencia</th><th>05/Sep/25</th><th>11/Oct/25</th><th>13/Oct/25</th><th>30/Dic/25</th><th>30/Mar/26</th><th>16/May/26</th></tr></thead>
       <tbody>
-        <tr><td>Hemoglobina g/dL</td><td>12.0–14.5</td><td class="cell-al">10.8</td><td class="cell-al">10.4</td><td class="cell-wn">12.5</td><td class="cell-al">11.9</td><td class="cell-wn">12.5</td></tr>
-        <tr><td>Hematocrito %</td><td>39–45</td><td class="cell-al">33.1</td><td class="cell-al">30.3</td><td class="cell-al">38.5</td><td class="cell-al">38.0</td><td class="cell-al">38.0</td></tr>
-        <tr><td>VCM fL</td><td>80–100</td><td class="cell-al">65.5 ↓↓</td><td class="cell-al">64.0 ↓↓</td><td class="cell-ok">90.0</td><td class="cell-wn">97.06 ↑</td><td class="cell-ok">89.4</td></tr>
-        <tr><td>RDW %</td><td>11.5–15.5</td><td class="cell-al">23.4 ↑↑</td><td class="cell-na">N/D</td><td class="cell-na">N/D</td><td class="cell-na">N/D</td><td class="cell-wn">15.0</td></tr>
-        <tr><td>Leucocitos ×10³</td><td>4.8–10.0</td><td class="cell-al">20.5 ↑↑</td><td class="cell-al">17.7 ↑</td><td class="cell-al">12.1 ↑</td><td class="cell-ok">9.7 ✓</td><td class="cell-al">12.9 ↑</td></tr>
-        <tr><td>Segmentados (Neut) %</td><td>55–70</td><td class="cell-al">71.0 ↑</td><td class="cell-ok">60.1</td><td class="cell-ok">60.2</td><td class="cell-ok">58</td><td class="cell-wn">69.9</td></tr>
-        <tr><td>Linfocitos %</td><td>25–40</td><td class="cell-wn">25.0</td><td class="cell-ok">32.8</td><td class="cell-ok">30.5</td><td class="cell-ok">38</td><td class="cell-ok">26.9</td></tr>
+        <tr><td>Hemoglobina g/dL</td><td>12.0–14.5</td><td class="cell-al">10.1</td><td class="cell-al">10.8</td><td class="cell-al">10.4</td><td class="cell-wn">12.5</td><td class="cell-al">11.9</td><td class="cell-wn">12.5</td></tr>
+        <tr><td>Hematocrito %</td><td>39–45</td><td class="cell-al">31.5</td><td class="cell-al">33.1</td><td class="cell-al">30.3</td><td class="cell-al">38.5</td><td class="cell-al">38.0</td><td class="cell-al">38.0</td></tr>
+        <tr><td>VCM fL</td><td>80–100</td><td class="cell-ok">90.0</td><td class="cell-al">65.5 ↓↓</td><td class="cell-al">64.0 ↓↓</td><td class="cell-ok">90.0</td><td class="cell-wn">97.06 ↑</td><td class="cell-ok">89.4</td></tr>
+        <tr><td>RDW %</td><td>11.5–15.5</td><td class="cell-na">N/D</td><td class="cell-al">23.4 ↑↑</td><td class="cell-na">N/D</td><td class="cell-na">N/D</td><td class="cell-na">N/D</td><td class="cell-wn">15.0</td></tr>
+        <tr><td>Leucocitos ×10³</td><td>4.8–10.0</td><td class="cell-al">12.7 ↑</td><td class="cell-al">20.5 ↑↑</td><td class="cell-al">17.7 ↑</td><td class="cell-al">12.1 ↑</td><td class="cell-ok">9.7 ✓</td><td class="cell-al">12.9 ↑</td></tr>
+        <tr><td>Segmentados (Neut) %</td><td>55–70</td><td class="cell-wn">61.4</td><td class="cell-al">71.0 ↑</td><td class="cell-ok">60.1</td><td class="cell-ok">60.2</td><td class="cell-ok">58</td><td class="cell-wn">69.9</td></tr>
+        <tr><td>Linfocitos %</td><td>25–40</td><td class="cell-ok">33.6</td><td class="cell-wn">25.0</td><td class="cell-ok">32.8</td><td class="cell-ok">30.5</td><td class="cell-ok">38</td><td class="cell-ok">26.9</td></tr>
       </tbody>
     </table>
     </div>
@@ -323,15 +324,31 @@ main{padding-top:54px;}
   <div id="t-quim" class="tab-panel">
     <div style="overflow-x:auto;">
     <table class="comp-table">
-      <thead><tr><th>Parámetro</th><th>Referencia</th><th>11/Oct/25</th><th>13/Oct/25</th><th>30/Dic/25</th><th>30/Mar/26</th></tr></thead>
+      <thead><tr><th>Parámetro</th><th>Referencia</th><th>05/Sep/25</th><th>11/Oct/25</th><th>13/Oct/25</th><th>30/Dic/25</th><th>30/Mar/26</th></tr></thead>
       <tbody>
-        <tr><td>Glicemia mg/dL</td><td>70–99</td><td class="cell-al">120 ↑</td><td class="cell-ok">85</td><td class="cell-ok">93</td><td class="cell-ok">90.1</td></tr>
-        <tr><td>TGO (AST) UI/L</td><td>hasta 38</td><td class="cell-ok">30</td><td class="cell-ok">35.0</td><td class="cell-ok">19.3</td><td class="cell-ok">34.1</td></tr>
-        <tr><td>TGP (ALT) UI/L</td><td>hasta 41</td><td class="cell-al">78 ↑↑</td><td class="cell-al">45.0 ↑</td><td class="cell-ok">26.2</td><td class="cell-ok">30.9</td></tr>
-        <tr><td>Colesterol Total mg/dL</td><td>hasta 200</td><td class="cell-ok">164</td><td class="cell-ok">194</td><td class="cell-ok">156</td><td class="cell-ok">150.3</td></tr>
-        <tr><td>Proteínas Totales</td><td>6.40-8.30</td><td class="cell-ok">6.47</td><td class="cell-ok">7.6</td><td class="cell-ok">7.4</td><td class="cell-ok">6.7</td></tr>
-        <tr><td>Globulinas</td><td>2.60-3.40</td><td class="cell-al">2.47 ↓</td><td class="cell-al">3.7 ↑</td><td class="cell-ok">2.9</td><td class="cell-ok">2.4</td></tr>
-        <tr><td>Relación A/G</td><td>1.10-1.60</td><td class="cell-al">1.62 ↑</td><td class="cell-ok">1.1</td><td class="cell-ok">1.6</td><td class="cell-wn">1.79</td></tr>
+        <tr><td>Glicemia mg/dL</td><td>70–99</td><td class="cell-wn">73 ↓</td><td class="cell-al">120 ↑</td><td class="cell-ok">85</td><td class="cell-ok">93</td><td class="cell-ok">90.1</td></tr>
+        <tr><td>TGO (AST) UI/L</td><td>hasta 38</td><td class="cell-ok">19.3</td><td class="cell-ok">30</td><td class="cell-ok">35.0</td><td class="cell-ok">19.3</td><td class="cell-ok">34.1</td></tr>
+        <tr><td>TGP (ALT) UI/L</td><td>hasta 41</td><td class="cell-ok">28.1</td><td class="cell-al">78 ↑↑</td><td class="cell-al">45.0 ↑</td><td class="cell-ok">26.2</td><td class="cell-ok">30.9</td></tr>
+        <tr><td>Colesterol Total mg/dL</td><td>hasta 200</td><td class="cell-ok">140</td><td class="cell-ok">164</td><td class="cell-ok">194</td><td class="cell-ok">156</td><td class="cell-ok">150.3</td></tr>
+        <tr><td>Proteínas Totales</td><td>6.40-8.30</td><td class="cell-ok">7.2</td><td class="cell-ok">6.47</td><td class="cell-ok">7.6</td><td class="cell-ok">7.4</td><td class="cell-ok">6.7</td></tr>
+        <tr><td>Globulinas</td><td>2.60-3.40</td><td class="cell-al">3.2 ↑</td><td class="cell-al">2.47 ↓</td><td class="cell-al">3.7 ↑</td><td class="cell-ok">2.9</td><td class="cell-ok">2.4</td></tr>
+        <tr><td>Relación A/G</td><td>1.10-1.60</td><td class="cell-al">1.3 ↓</td><td class="cell-al">1.62 ↑</td><td class="cell-ok">1.1</td><td class="cell-ok">1.6</td><td class="cell-wn">1.79</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div id="t-hierro" class="tab-panel">
+    <div style="overflow-x:auto;">
+    <table class="comp-table">
+      <thead><tr><th>Parámetro</th><th>Referencia</th><th>16/May/26</th></tr></thead>
+      <tbody>
+        <tr><td>Ferritina ng/mL</td><td>13–150</td><td class="cell-al">20.32 ↓</td></tr>
+        <tr><td>Vitamina B12 pg/mL</td><td>200–900</td><td class="cell-wn">274</td></tr>
+        <tr><td>Folato ng/mL</td><td>>3.0</td><td class="cell-ok">14.9</td></tr>
+        <tr><td>Transferrina mg/dL</td><td>200–360</td><td class="cell-al">400 ↑</td></tr>
+        <tr><td>Saturación de Transferrina %</td><td>20–50</td><td class="cell-ok">42</td></tr>
+        <tr><td>Hierro Sérico µg/dL</td><td>37–170</td><td class="cell-ok">163</td></tr>
       </tbody>
     </table>
     </div>
@@ -447,6 +464,31 @@ main{padding-top:54px;}
   </div>
 </div>
 
+<div class="sep"></div>
+
+<!-- SINTOMAS EN VIGILANCIA -->
+<div id="vigilancia" class="section">
+  <div class="sec-hdr"><span class="sec-num">08</span><h2 class="sec-title">Síntomas Emergentes en Vigilancia</h2></div>
+  <div class="g2">
+    <div class="abox red">
+      <div class="at">Temblores nocturnos</div>
+      <div class="ab">Temblores durante el sueño. Frecuencia en aumento. Riesgo de mordedura. Evaluar posible actividad epiléptica.</div>
+    </div>
+    <div class="abox red">
+      <div class="at">Pérdida de sensibilidad focal</div>
+      <div class="ab">Afectando principalmente el pie izquierdo. Requiere evaluación neurológica urgente.</div>
+    </div>
+    <div class="abox orange">
+      <div class="at">Sudoración nocturna profusa</div>
+      <div class="ab">Presente desde hace aproximadamente 1 año. Relacionado posible componente autonómico.</div>
+    </div>
+    <div class="abox orange">
+      <div class="at">Intolerancia al calor/esfuerzo</div>
+      <div class="ab">Marcada desde el 31/05/2026. Descompensación rápida con mínimo esfuerzo.</div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <!-- NEUTRON NOTES SECTION -->
@@ -489,7 +531,7 @@ main{padding-top:54px;}
   </div>
 
   <div class="ai-body" id="ai-chat-history">
-    <div class="ai-msg bot">¡Hola! Soy <strong>Neutron</strong> 🚀, tu acompañante de bolsillo en este viaje. Ya me leí toda tu bitácora y estoy listo para escucharte, hacerte reír un rato si lo necesitas, o simplemente ser ese hombro virtual súper analítico en el que puedes apoyarte. ¿Cómo te sientes hoy, hermosa? Cuéntame qué hay de nuevo.</div>
+    <div class="ai-msg bot">¡Hola! Soy <strong>Neutron</strong> 🚀, tu analista clínico. He leído toda tu bitácora, incluyendo los nuevos datos de laboratorio y síntomas. ¿Qué vamos a revisar hoy?</div>
   </div>
 
   <input type="file" id="img-file-input" accept="image/*" style="display:none" onchange="handleImageUpload(event)">

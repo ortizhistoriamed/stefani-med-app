@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stefani-med-cache-v1';
+const CACHE_NAME = 'stefani-med-cache-v3';
 const urlsToCache = [
   './index.html',
   './manifest.json',
