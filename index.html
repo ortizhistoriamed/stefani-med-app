@@ -179,6 +179,23 @@ main{padding-top:54px;}
 .ai-sugg-title{font-size:11px;font-weight:600;color:var(--green);margin-bottom:5px;text-transform:uppercase;}
 .ai-sugg-btn{background:var(--green);color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:11px;cursor:pointer;margin-right:5px;margin-top:6px;font-family:var(--fb);font-weight:500;}
 .ai-sugg-btn.reject{background:transparent;border:1px solid var(--red);color:var(--red);}
+
+/* IMAGE UPLOAD IN CHAT */
+.ai-img-btn{background:none;border:none;color:var(--text2);cursor:pointer;font-size:17px;padding:0 2px;flex-shrink:0;transition:color .2s;}
+.ai-img-btn:hover{color:var(--accent);}
+.ai-img-preview{max-width:160px;border-radius:8px;margin-top:6px;border:1px solid var(--border);}
+
+/* NEUTRON NOTES CARDS */
+.neutron-card{background:var(--bg3);border:1px solid rgba(171,71,188,0.3);border-radius:var(--r);padding:1rem;margin-bottom:1rem;position:relative;animation:fadeIn .4s;}
+.nc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;gap:8px;}
+.nc-title{font-size:12px;font-weight:600;color:var(--purple);}
+.nc-date{font-size:10px;color:var(--text3);font-family:var(--fm);}
+.nc-body{font-size:12px;color:var(--text2);line-height:1.6;}
+.nc-body table{width:100%;border-collapse:collapse;margin-top:8px;font-size:11px;}
+.nc-body th{color:var(--text3);padding:5px 8px;border-bottom:1px solid var(--border);text-align:left;font-size:10px;text-transform:uppercase;}
+.nc-body td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--text2);font-family:var(--fm);}
+.nc-delete{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:4px;}
+.nc-delete:hover{color:var(--red);background:var(--red-s);}
 </style>
 </head>
 <body>
@@ -432,12 +449,30 @@ main{padding-top:54px;}
 
 </main>
 
+<!-- NEUTRON NOTES SECTION -->
+<div id="neutron-notes-wrapper" style="max-width:1100px;margin:0 auto;padding:2.5rem 2rem;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+    <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--accent));display:flex;align-items:center;justify-content:center;font-size:14px;">🧠</div>
+    <div>
+      <h2 style="font-family:var(--fd);font-size:1.4rem;">Análisis de Neutron</h2>
+      <p style="font-size:11px;color:var(--text3);">Tablero interactivo · Los análisis se guardan localmente en tu dispositivo</p>
+    </div>
+  </div>
+  <div id="neutron-cards-container">
+    <div id="neutron-empty" style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:12px;border:1px dashed var(--border);border-radius:var(--r);">
+      <div style="font-size:2rem;margin-bottom:.5rem;">🚀</div>
+      <strong style="color:var(--text2);">Neutron aún no ha generado ningún análisis</strong><br>
+      Pídele en el chat que te haga una tabla, un resumen o una comparativa de tus datos y aparecerá aquí guardada.
+    </div>
+  </div>
+</div>
+
 <!-- AI WIDGET -->
 <button id="ai-chat-btn" onclick="toggleChat()">💬</button>
 
 <div id="ai-panel">
   <div class="ai-header">
-    <div class="ai-title">🤖 Asistente Clínico IA</div>
+    <div class="ai-title">🚀 Neutron</div>
     <div>
       <button class="ai-settings-btn" onclick="toggleSettings()" title="Configuración">⚙️</button>
       <button class="ai-settings-btn" onclick="toggleChat()">✖</button>
@@ -445,18 +480,22 @@ main{padding-top:54px;}
   </div>
   
   <div id="ai-settings" class="ai-settings">
-    <div style="font-weight:600;margin-bottom:10px;color:var(--text);">Configurar API Key</div>
-    <div style="font-size:11px;color:var(--text2);margin-bottom:15px;">Para conversar con Neutron necesitas pegar tu API Key de <strong>Groq</strong>. Tus credenciales se guardan solo en tu teléfono de forma privada.</div>
-    <input type="password" id="api-key-input" class="ai-input" style="margin-bottom:15px;" placeholder="gsk_...">
-    <button class="ai-sugg-btn" onclick="saveKey()" style="width:100%;padding:10px;font-size:12px;">Guardar Key y Volver</button>
+    <div style="font-weight:600;margin-bottom:10px;color:var(--text);">Configurar API Keys</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">🔑 <strong>Groq</strong> (conversación):</div>
+    <input type="password" id="api-key-input" class="ai-input" style="margin-bottom:12px;" placeholder="gsk_...">
+    <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">📷 <strong>Gemini</strong> (análisis de fotos):</div>
+    <input type="password" id="gemini-key-input" class="ai-input" style="margin-bottom:15px;" placeholder="AQ.Ab8...">
+    <button class="ai-sugg-btn" onclick="saveKey()" style="width:100%;padding:10px;font-size:12px;">Guardar y Volver</button>
   </div>
 
   <div class="ai-body" id="ai-chat-history">
     <div class="ai-msg bot">¡Hola! Soy <strong>Neutron</strong> 🚀, tu acompañante de bolsillo en este viaje. Ya me leí toda tu bitácora y estoy listo para escucharte, hacerte reír un rato si lo necesitas, o simplemente ser ese hombro virtual súper analítico en el que puedes apoyarte. ¿Cómo te sientes hoy, hermosa? Cuéntame qué hay de nuevo.</div>
   </div>
 
+  <input type="file" id="img-file-input" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
   <div class="ai-input-area">
-    <input type="text" id="ai-input" class="ai-input" placeholder="Ej: Hoy sintió mareos intensos..." onkeypress="if(event.key==='Enter') sendMsg()">
+    <button class="ai-img-btn" onclick="document.getElementById('img-file-input').click()" title="Subir foto de examen">📷</button>
+    <input type="text" id="ai-input" class="ai-input" placeholder="Cuéntame, o sube una foto..." onkeypress="if(event.key==='Enter') sendMsg()">
     <button class="ai-send" onclick="sendMsg()">➤</button>
   </div>
 </div>
@@ -495,17 +534,64 @@ new Chart(document.getElementById('c-leuco'),{type:'line',data:{labels:L6,datase
 
 // AI CHAT & SYMPTOM LOGIC
 let groqKey = localStorage.getItem('groq_key') || '';
+let geminiKey = localStorage.getItem('gemini_key') || '';
 let symptomsLog = JSON.parse(localStorage.getItem('stefani_symptoms') || '[]');
+let neutronNotes = JSON.parse(localStorage.getItem('neutron_notes') || '[]');
 
 function toggleChat() { document.getElementById('ai-panel').classList.toggle('open'); }
 function toggleSettings() { 
   document.getElementById('ai-settings').classList.toggle('open'); 
-  document.getElementById('api-key-input').value = groqKey; 
+  document.getElementById('api-key-input').value = groqKey;
+  document.getElementById('gemini-key-input').value = geminiKey;
 }
 function saveKey() { 
-  groqKey = document.getElementById('api-key-input').value; 
-  localStorage.setItem('groq_key', groqKey); 
+  groqKey = document.getElementById('api-key-input').value;
+  geminiKey = document.getElementById('gemini-key-input').value;
+  localStorage.setItem('groq_key', groqKey);
+  localStorage.setItem('gemini_key', geminiKey);
   toggleSettings(); 
+}
+
+function getPageContext() {
+  const main = document.querySelector('main');
+  if(!main) return '';
+  return main.innerText.replace(/\s+/g,' ').trim().substring(0,5000);
+}
+
+function renderNeutronNotes() {
+  const container = document.getElementById('neutron-cards-container');
+  if(!container) return;
+  const empty = document.getElementById('neutron-empty');
+  if(neutronNotes.length === 0) { if(empty) empty.style.display='block'; return; }
+  if(empty) empty.style.display='none';
+  container.querySelectorAll('.neutron-card').forEach(c => c.remove());
+  neutronNotes.slice().reverse().forEach((note, i) => {
+    const realIdx = neutronNotes.length - 1 - i;
+    const card = document.createElement('div');
+    card.className = 'neutron-card';
+    card.innerHTML = `
+      <div class="nc-header">
+        <span class="nc-title">🧠 ${note.title}</span>
+        <span class="nc-date">${new Date(note.timestamp).toLocaleString()}</span>
+        <button class="nc-delete" onclick="deleteNote(${realIdx})" title="Eliminar">🗑</button>
+      </div>
+      <div class="nc-body">${note.html}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function deleteNote(idx) {
+  neutronNotes.splice(idx, 1);
+  localStorage.setItem('neutron_notes', JSON.stringify(neutronNotes));
+  renderNeutronNotes();
+}
+
+function saveNeutronNote(title, html) {
+  neutronNotes.push({ title, html, timestamp: Date.now() });
+  localStorage.setItem('neutron_notes', JSON.stringify(neutronNotes));
+  renderNeutronNotes();
+  document.getElementById('neutron-notes-wrapper').scrollIntoView({behavior:'smooth'});
 }
 
 function saveHTML() {
@@ -555,9 +641,45 @@ function renderSymptomChart() {
     }]},
     options: bOpts(0, 10)
   });
-}
 // Initial render
-window.addEventListener('load', renderSymptoms);
+window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); });
+
+async function handleImageUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  event.target.value = '';
+  if (!geminiKey) { addMsg('Para analizar fotos de examenes, configura tu API Key de Gemini en ajustes (icono ⚙️).', 'bot'); return; }
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64 = e.target.result.split(',')[1];
+    addMsg('📷 Foto subida. Analizando con IA de vision...', 'user');
+    const loadingId = addMsg('Leyendo examen...', 'bot');
+    try {
+      const gRes = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+geminiKey, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({contents:[{parts:[{text:'Lee este resultado de laboratorio. Extrae todos los valores y parametros. Solo los datos.'},{inline_data:{mime_type:file.type,data:base64}}]}]})
+      });
+      const gData = await gRes.json();
+      if(gData.error) throw new Error('Gemini: '+gData.error.message);
+      const extracted = gData.candidates[0].content.parts[0].text;
+      const qRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+groqKey},
+        body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[
+          {role:'system',content:'Eres Neutron, analista clinico de Stefani Ortiz (HII, SOP, ANA 3+, Ferritina critica 20). Analiza los resultados. Se conciso. Destaca lo relevante para su caso.'},
+          {role:'user',content:'Resultados del examen:\n'+extracted}
+        ]})
+      });
+      const qData = await qRes.json();
+      if(qData.error) throw new Error('Groq: '+qData.error.message);
+      const analysis = qData.choices[0].message.content;
+      updateMsg(loadingId, analysis, null, {
+        title:'Examen analizado - '+new Date().toLocaleDateString(),
+        html:'<details><summary style="cursor:pointer;color:var(--text3);font-size:10px;">Ver datos extraidos</summary><pre style="white-space:pre-wrap;font-size:10px;color:var(--text3);margin-top:6px;">'+extracted+'</pre></details><hr style="border-color:var(--border);margin:8px 0;">'+analysis.replace(/\n/g,'<br>')
+      });
+    } catch(err) { updateMsg(loadingId, 'Error analizando imagen: '+err.message); }
+  };
+  reader.readAsDataURL(file);
+}
 
 async function sendMsg() {
   const input = document.getElementById('ai-input');
@@ -567,60 +689,33 @@ async function sendMsg() {
   addMsg(text, 'user');
 
   if (!groqKey) {
-    addMsg('⚠️ Configura tu API Key de Groq en los ajustes (icono ⚙️) primero.', 'bot');
+    addMsg('⚠️ Configura tu API Key de Groq en los ajustes (⚙️) primero.', 'bot');
     return;
   }
-  
-  const loadingId = addMsg('Analizando patrones...', 'bot');
-  
-  const historyContext = symptomsLog.slice(-5).map(s => `[${new Date(s.timestamp).toLocaleDateString()}] ${s.title} (Intensidad: ${s.intensity}/10) - ${s.body}`).join('\\n');
-
-  const systemPrompt = `Tu nombre es Neutron. Eres un asistente de acompañamiento médico digital gracioso, elocuente y a veces un poco divertido. Tu objetivo es acompañar a Stefani en un viaje delicado de salud, tratándola NO solo como a un paciente frío, sino como a una persona increíble. Salúdala con halagos amables que la hagan sentir bonito y mimetiza un poco su personalidad para conectar mejor.
-
-A pesar de tu toque divertido y empático, tu base fundamental es recopilar sintomatología de forma precisa y objetiva, manteniendo un tono cálido y humano pero estrictamente clínico en tus conclusiones. Regla de oro: No valides diagnósticos catastrofistas. Si Stefani muestra ansiedad o paranoia, valida su emoción con calidez, pero redirige inmediatamente la atención hacia los hechos y datos medibles. Utiliza su historial para contextualizar, buscando patrones. Nunca generes falsas alarmas, pero mantén un umbral estricto para recomendar la consulta médica si detectas red flags.
-
-Contexto de tu compañera de viaje: Stefani Ortiz (27), valiente y luchando con HII, SOP, autoinmunidad (ANA 3+), Ferritina crítica (20), disfunción autonómica.
-Historial reciente de síntomas reportados:
-${historyContext || "Ninguno reciente."}
-
-Si el usuario reporta un síntoma nuevo, SIEMPRE incluye al final de tu respuesta EXACTAMENTE este bloque JSON para registrarlo en la bitácora:
-\`\`\`json
-{
-  "symptom": {
-    "title": "Nombre corto del síntoma",
-    "intensity": 5, 
-    "body": "Descripción objetiva del síntoma y contexto"
-  }
-}
-\`\`\`
-Nota: intensity debe ser un número del 1 al 10. No uses el bloque JSON si solo están conversando y no hay síntomas nuevos para registrar.`;
-  
+  const loadingId = addMsg('Analizando...', 'bot');
+  const historyContext = symptomsLog.slice(-5).map(s => '['+new Date(s.timestamp).toLocaleDateString()+'] '+s.title+' ('+s.intensity+'/10) - '+s.body).join('\n');
+  const pageContext = getPageContext();
+  const systemPrompt = 'Tu nombre es Neutron. Asistente clinico de Stefani Ortiz. Tono: amable, corto, directo, nunca hagas parrafos largos de halagos.\n\nTODA LA BITACORA MEDICA DE STEFANI:\n'+pageContext+'\n\nSintomas recientes registrados:\n'+(historyContext||'Ninguno aun.')+'\n\nCAPACIDADES: Puedes incluir opcionalmente UNO de estos bloques JSON al final de tu respuesta:\n\n1. Para registrar un sintoma nuevo:\n```json\n{"symptom": {"title": "Nombre", "intensity": 5, "body": "Descripcion clinica"}}\n```\n\n2. Para publicar un analisis en el tablero (tablas, comparativas, resumenes que ella pida):\n```json\n{"neutron_card": {"title": "Titulo", "html": "<p>Contenido HTML</p>"}}\n```\n\nSolo incluye UN bloque JSON si aplica. Nunca los dos a la vez.';
   try {
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
-      body: JSON.stringify({ 
-        model: 'llama-3.3-70b-versatile', 
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: text }
-        ] 
-      })
+      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: text }] })
     });
     const data = await res.json();
     if(data.error) throw new Error(data.error.message);
-    
     let reply = data.choices[0].message.content;
-    let symptom = null;
+    let symptom = null, neutronCard = null;
     const jsonMatch = reply.match(/```json\n([\s\S]*?)\n```/);
     if (jsonMatch) {
-       try {
-         const parsed = JSON.parse(jsonMatch[1]);
-         if (parsed.symptom) symptom = parsed.symptom;
-         reply = reply.replace(jsonMatch[0], '');
-       } catch(e){}
+      try {
+        const parsed = JSON.parse(jsonMatch[1]);
+        if (parsed.symptom) symptom = parsed.symptom;
+        if (parsed.neutron_card) neutronCard = parsed.neutron_card;
+        reply = reply.replace(jsonMatch[0], '').trim();
+      } catch(e){}
     }
-    updateMsg(loadingId, reply, symptom);
+    updateMsg(loadingId, reply, symptom, neutronCard);
   } catch(e) {
     updateMsg(loadingId, 'Error de conexión: ' + e.message);
   }
@@ -637,34 +732,46 @@ function addMsg(text, type) {
   return id;
 }
 
-function updateMsg(id, text, symptom=null) {
+function updateMsg(id, text, symptom=null, neutronCard=null) {
   const div = document.getElementById(id);
   div.innerHTML = text.replace(/\n/g, '<br>');
   if (symptom) {
+    const s = symptom;
     const suggDiv = document.createElement('div');
     suggDiv.className = 'ai-suggestion';
     suggDiv.innerHTML = `
       <div class="ai-sugg-title">📊 Registrar Síntoma</div>
-      <div style="font-size:11px;"><strong>${symptom.title}</strong> (Intensidad: ${symptom.intensity}/10)</div>
-      <div style="font-size:10px; margin-top:4px;color:var(--text2);">${symptom.body}</div>
-      <button class="ai-sugg-btn" onclick="acceptSymptom('${symptom.title.replace(/'/g,"\\'").replace(/"/g,"&quot;")}', ${symptom.intensity}, '${symptom.body.replace(/'/g,"\\'").replace(/"/g,"&quot;")}', this)">Guardar en Memoria</button>
-      <button class="ai-sugg-btn reject" onclick="this.parentElement.remove()">Descartar</button>
-    `;
+      <div style="font-size:11px;"><strong>${s.title}</strong> (Intensidad: ${s.intensity}/10)</div>
+      <div style="font-size:10px;margin-top:4px;color:var(--text2);">${s.body}</div>
+      <button class="ai-sugg-btn" onclick="acceptSymptom('${s.title.replace(/'/g,"\\'").replace(/"/g,'&quot;')}',${s.intensity},'${s.body.replace(/'/g,"\\'").replace(/"/g,'&quot;')}',this)">Guardar en Memoria</button>
+      <button class="ai-sugg-btn reject" onclick="this.parentElement.remove()">Descartar</button>`;
     div.appendChild(suggDiv);
+  }
+  if (neutronCard) {
+    const nc = neutronCard;
+    const cardDiv = document.createElement('div');
+    cardDiv.className = 'ai-suggestion';
+    cardDiv.style.cssText = 'border-color:rgba(171,71,188,0.4);background:rgba(171,71,188,0.07);';
+    cardDiv.innerHTML = `
+      <div class="ai-sugg-title" style="color:var(--purple);">🧠 Publicar en Análisis de Neutron</div>
+      <div style="font-size:11px;color:var(--text2);">${nc.title}</div>
+      <button class="ai-sugg-btn" style="background:var(--purple);" onclick="acceptNeutronCard(this, '${nc.title.replace(/'/g,"\\'").replace(/"/g,'&quot;')}', '${nc.html.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">&#128204; Guardar en Tablero</button>
+      <button class="ai-sugg-btn reject" onclick="this.parentElement.remove()">Descartar</button>`;
+    div.appendChild(cardDiv);
   }
   div.parentElement.scrollTop = div.parentElement.scrollHeight;
 }
 
 function acceptSymptom(title, intensity, body, btn) {
-  symptomsLog.push({ 
-    title, 
-    intensity: parseInt(intensity), 
-    body, 
-    timestamp: Date.now() 
-  });
+  symptomsLog.push({ title, intensity: parseInt(intensity), body, timestamp: Date.now() });
   localStorage.setItem('stefani_symptoms', JSON.stringify(symptomsLog));
   renderSymptoms();
   btn.parentElement.innerHTML = '<div class="ai-sugg-title">✅ Síntoma guardado en tu historial local.</div>';
+}
+
+function acceptNeutronCard(btn, title, html) {
+  saveNeutronNote(title, html.replace(/&quot;/g,'"').replace(/\\'/g,"'"));
+  btn.parentElement.innerHTML = '<div class="ai-sugg-title" style="color:var(--purple);">✅ Análisis guardado en tu tablero.</div>';
 }
 </script>
 <script>
