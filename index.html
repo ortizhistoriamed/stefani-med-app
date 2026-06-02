@@ -411,33 +411,39 @@ main{padding-top:54px;}
   </div>
   
   <!-- MODAL SINTOMA -->
-  <div id="modal-sintoma" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,14,26,0.9);z-index:2000;padding:2rem 1rem;">
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;max-width:500px;margin:0 auto;">
-      <h3 style="margin-bottom:15px;">💊 Registrar Síntoma</h3>
-      <input type="text" id="ms-title" class="ai-input" placeholder="Ej: Cefalea, Mareos, Dolor articular" style="margin-bottom:10px;">
-      <div style="margin-bottom:10px;font-size:12px;">Intensidad (1-10): <span id="ms-val" style="color:var(--accent);font-weight:bold;">5</span></div>
-      <input type="range" id="ms-int" min="1" max="10" value="5" style="width:100%;margin-bottom:10px;" oninput="document.getElementById('ms-val').innerText=this.value">
-      <textarea id="ms-body" class="ai-input" placeholder="Detalles, gatillos (ej. calor, esfuerzo)..." style="height:60px;margin-bottom:10px;"></textarea>
-      <input type="datetime-local" id="ms-date" class="ai-input" style="margin-bottom:15px;">
-      <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:15px;"><input type="checkbox" id="ms-tl"> 📌 Agregar como hito a la cronología</label>
-      <div style="display:flex;gap:10px;">
-        <button class="ai-sugg-btn" style="flex:1;background:var(--green);color:#fff;" onclick="saveManualSymptom()">Guardar</button>
-        <button class="ai-sugg-btn" style="flex:1;" onclick="document.getElementById('modal-sintoma').style.display='none'">Cancelar</button>
+  <div id="modal-sintoma" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,14,26,0.92);z-index:2000;padding:1rem;overflow-y:auto;">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:2rem;max-width:540px;margin:2rem auto;">
+      <h3 style="margin-bottom:1.2rem;font-size:1.2rem;">💊 Registrar Síntoma</h3>
+      <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:600;text-transform:uppercase;">Nombre del síntoma</label>
+      <input type="text" id="ms-title" class="ai-input" placeholder="Ej: Cefalea, Mareos, Dolor articular" style="margin-bottom:1rem;width:100%;padding:12px 16px;font-size:14px;border-radius:var(--r);">
+      <div style="margin-bottom:6px;font-size:12px;">Intensidad: <span id="ms-val" style="color:var(--accent);font-weight:bold;font-size:1.3rem;">5</span><span style="color:var(--text3);">/10</span></div>
+      <input type="range" id="ms-int" min="1" max="10" value="5" style="width:100%;margin-bottom:1.2rem;accent-color:var(--accent);height:8px;" oninput="document.getElementById('ms-val').innerText=this.value">
+      <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:600;text-transform:uppercase;">Detalles / Gatillos</label>
+      <textarea id="ms-body" class="ai-input" placeholder="¿Qué lo desencadenó? Calor, esfuerzo, estrés, comida..." style="height:100px;margin-bottom:1rem;width:100%;padding:12px 16px;font-size:13px;border-radius:var(--r);resize:vertical;"></textarea>
+      <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:600;text-transform:uppercase;">Fecha y hora</label>
+      <input type="datetime-local" id="ms-date" class="ai-input" style="margin-bottom:1.2rem;width:100%;padding:12px 16px;font-size:13px;border-radius:var(--r);">
+      <label style="display:flex;align-items:center;gap:10px;font-size:13px;margin-bottom:1.5rem;padding:10px;background:var(--bg3);border-radius:var(--rs);border:1px solid var(--border);"><input type="checkbox" id="ms-tl" style="width:18px;height:18px;"> 📌 Agregar como hito a la cronología</label>
+      <div style="display:flex;gap:12px;">
+        <button class="ai-sugg-btn" style="flex:1;background:var(--green);color:#fff;padding:12px;font-size:14px;border-radius:var(--r);" onclick="saveManualSymptom()">Guardar</button>
+        <button class="ai-sugg-btn" style="flex:1;padding:12px;font-size:14px;border-radius:var(--r);background:var(--bg3);border:1px solid var(--border);" onclick="document.getElementById('modal-sintoma').style.display='none'">Cancelar</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL DIARIO -->
-  <div id="modal-diario" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,14,26,0.9);z-index:2000;padding:2rem 1rem;">
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;max-width:500px;margin:0 auto;">
-      <h3 style="margin-bottom:15px;">📝 Entrada Libre (Journal)</h3>
-      <input type="text" id="md-title" class="ai-input" placeholder="Título de la entrada" style="margin-bottom:10px;">
-      <textarea id="md-body" class="ai-input" placeholder="Escribe cómo te sientes hoy, observaciones detalladas..." style="height:120px;margin-bottom:10px;"></textarea>
-      <input type="datetime-local" id="md-date" class="ai-input" style="margin-bottom:15px;">
-      <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:15px;"><input type="checkbox" id="md-tl"> 📌 Agregar a cronología</label>
-      <div style="display:flex;gap:10px;">
-        <button class="ai-sugg-btn" style="flex:1;background:var(--green);color:#fff;" onclick="saveManualJournal()">Guardar Entrada</button>
-        <button class="ai-sugg-btn" style="flex:1;" onclick="document.getElementById('modal-diario').style.display='none'">Cancelar</button>
+  <div id="modal-diario" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,14,26,0.92);z-index:2000;padding:1rem;overflow-y:auto;">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:2rem;max-width:540px;margin:2rem auto;">
+      <h3 style="margin-bottom:1.2rem;font-size:1.2rem;">📝 Entrada Libre (Journal)</h3>
+      <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:600;text-transform:uppercase;">Título</label>
+      <input type="text" id="md-title" class="ai-input" placeholder="Título de la entrada" style="margin-bottom:1rem;width:100%;padding:12px 16px;font-size:14px;border-radius:var(--r);">
+      <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:600;text-transform:uppercase;">Contenido</label>
+      <textarea id="md-body" class="ai-input" placeholder="Escribe cómo te sientes hoy, observaciones detalladas, qué notaste diferente..." style="height:160px;margin-bottom:1rem;width:100%;padding:12px 16px;font-size:13px;border-radius:var(--r);resize:vertical;"></textarea>
+      <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:600;text-transform:uppercase;">Fecha y hora</label>
+      <input type="datetime-local" id="md-date" class="ai-input" style="margin-bottom:1.2rem;width:100%;padding:12px 16px;font-size:13px;border-radius:var(--r);">
+      <label style="display:flex;align-items:center;gap:10px;font-size:13px;margin-bottom:1.5rem;padding:10px;background:var(--bg3);border-radius:var(--rs);border:1px solid var(--border);"><input type="checkbox" id="md-tl" style="width:18px;height:18px;"> 📌 Agregar a cronología</label>
+      <div style="display:flex;gap:12px;">
+        <button class="ai-sugg-btn" style="flex:1;background:var(--green);color:#fff;padding:12px;font-size:14px;border-radius:var(--r);" onclick="saveManualJournal()">Guardar Entrada</button>
+        <button class="ai-sugg-btn" style="flex:1;padding:12px;font-size:14px;border-radius:var(--r);background:var(--bg3);border:1px solid var(--border);" onclick="document.getElementById('modal-diario').style.display='none'">Cancelar</button>
       </div>
     </div>
   </div>
@@ -825,20 +831,40 @@ function renderNeutronNotes() {
       <div class="nc-header">
         <span class="nc-title">🧠 ${note.title}</span>
         <span class="nc-date">${new Date(note.timestamp).toLocaleString()}</span>
-        <button class="nc-delete" onclick="deleteNote(${realIdx})" title="Eliminar">🗑</button>
       </div>
       <div class="nc-body">${note.html}</div>
+      <div style="display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+        <button onclick="editNote(${realIdx})" style="flex:1;background:rgba(100,181,246,0.1);border:1px solid rgba(100,181,246,0.3);color:var(--accent);border-radius:var(--rs);padding:8px;font-size:12px;cursor:pointer;font-family:var(--fb);">✏️ Editar</button>
+        <button onclick="deleteNote(${realIdx})" style="flex:1;background:var(--red-s);border:1px solid rgba(239,83,80,0.3);color:var(--red);border-radius:var(--rs);padding:8px;font-size:12px;cursor:pointer;font-family:var(--fb);">🗑 Eliminar</button>
+      </div>
     `;
     container.appendChild(card);
   });
 }
 
 function deleteNote(idx) {
+  if(!confirm('¿Seguro que deseas eliminar este análisis de Neutron? Esta acción no se puede deshacer.')) return;
   const note = neutronNotes[idx];
   neutronNotes.splice(idx, 1);
+  localStorage.setItem('neutron_notes', JSON.stringify(neutronNotes));
   renderNeutronNotes();
   if (note.id && supabaseClient) {
     supabaseClient.from('neutron_notes').delete().eq('id', note.id).then(()=>{});
+  }
+}
+
+function editNote(idx) {
+  const note = neutronNotes[idx];
+  const newTitle = prompt('Editar título del análisis:', note.title);
+  if(newTitle === null) return;
+  const newBody = prompt('Editar contenido (HTML):', note.html);
+  if(newBody === null) return;
+  neutronNotes[idx].title = newTitle;
+  neutronNotes[idx].html = newBody;
+  localStorage.setItem('neutron_notes', JSON.stringify(neutronNotes));
+  renderNeutronNotes();
+  if(note.id && supabaseClient) {
+    supabaseClient.from('neutron_notes').update({ title: newTitle, html: newBody }).eq('id', note.id).then(()=>{});
   }
 }
 
