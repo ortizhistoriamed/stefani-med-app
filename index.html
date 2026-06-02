@@ -572,6 +572,7 @@ main{padding-top:54px;}
 </div>
 </div>
 
+</main>
 
 <!-- AI WIDGET -->
 <button id="ai-chat-btn" onclick="toggleChat()">💬</button>
@@ -748,20 +749,6 @@ async function loadSupabaseData() {
   renderNeutronNotes();
 }
 
-function toggleChat() { document.getElementById('ai-panel').classList.toggle('open'); }
-function toggleSettings() { 
-  document.getElementById('ai-settings').classList.toggle('open'); 
-  document.getElementById('api-key-input').value = groqKey;
-  document.getElementById('gemini-key-input').value = geminiKey;
-}
-function saveKey() { 
-  groqKey = document.getElementById('api-key-input').value;
-  geminiKey = document.getElementById('gemini-key-input').value;
-  localStorage.setItem('groq_key', groqKey);
-  localStorage.setItem('gemini_key', geminiKey);
-  toggleSettings(); 
-}
-
 function getPageContext() {
   const main = document.querySelector('main');
   if(!main) return '';
@@ -819,15 +806,6 @@ async function saveNeutronNote(title, html) {
   }
 }
 
-function saveHTML() {
-  const content = document.documentElement.outerHTML;
-  const blob = new Blob([content], {type: 'text/html'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'bitacora_stefani_actualizada.html';
-  a.click();
-}
-
 function renderSymptoms() {
   const list = document.getElementById('sintomas-list');
   if(!list) return;
@@ -866,6 +844,7 @@ function renderSymptomChart() {
     }]},
     options: bOpts(0, 10)
   });
+}
 // Initial render
 window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); renderRepoCats(); filterRepo(); loadSupabaseData(); });
 
