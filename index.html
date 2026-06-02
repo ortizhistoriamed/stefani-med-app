@@ -40,7 +40,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,14,26,0.9
 .nl.active{color:var(--accent);background:rgba(100,181,246,0.1);}
 .btn-save{background:rgba(102,187,106,0.15);color:var(--green);border:1px solid rgba(102,187,106,0.3);padding:4px 10px;border-radius:var(--rs);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;}
 .btn-save:hover{background:var(--green);color:#fff;}
-.prog{position:fixed;top:54px;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--teal));z-index:99;width:0%;transition:width .1s;}
+.prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--teal));z-index:2000;width:0%;transition:width .1s;}
 
 /* Mobile Bottom Nav */
 @media(max-width:768px){
@@ -252,17 +252,16 @@ main{padding-top:54px;}
     <button class="nl" onclick="showPage('page-sintomas')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
     <button class="nl" onclick="showPage('page-resultados')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Resultados</button>
     <button class="nl" onclick="showPage('page-archivo')"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>Archivo</button>
+    <button class="nl" onclick="showPage('page-ia')"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 17.93V18a1 1 0 0 0-2 0v1.93A8 8 0 0 1 4.07 13H6a1 1 0 0 0 0-2H4.07A8 8 0 0 1 11 4.07V6a1 1 0 0 0 2 0V4.07A8 8 0 0 1 19.93 11H18a1 1 0 0 0 0 2h1.93A8 8 0 0 1 13 19.93z"/></svg>Neutron IA</button>
     <button class="btn-save" onclick="saveHTML()">💾 Guardar</button>
   </div>
 </nav>
 
-<div class="mobile-nav">
   <button class="mn-btn active" onclick="showPage('page-inicio')"><svg viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-14v-9h-3z"/></svg>Inicio</button>
   <button class="mn-btn" onclick="showPage('page-cronologia')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Crono</button>
   <button class="mn-btn" onclick="showPage('page-sintomas')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
-  <button class="mn-btn" onclick="showPage('page-resultados')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Labs</button>
-  <button class="mn-btn" onclick="showPage('page-archivo')"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>Archivo</button>
-  <button class="mn-btn" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>IA</button>
+  <button class="mn-btn" onclick="showPage('page-ia')"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 17.93V18a1 1 0 0 0-2 0v1.93A8 8 0 0 1 4.07 13H6a1 1 0 0 0 0-2H4.07A8 8 0 0 1 11 4.07V6a1 1 0 0 0 2 0V4.07A8 8 0 0 1 19.93 11H18a1 1 0 0 0 0 2h1.93A8 8 0 0 1 13 19.93z"/></svg>IA</button>
+  <button class="mn-btn" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>Chat</button>
 </div>
 
 <main>
@@ -325,24 +324,7 @@ main{padding-top:54px;}
 
 <div class="sep"></div>
 
-<!-- NEUTRON NOTES SECTION -->
-<div id="neutron-notes-wrapper" style="max-width:1100px;margin:0 auto;padding:2.5rem 2rem;">
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
-    <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--accent));display:flex;align-items:center;justify-content:center;font-size:14px;">🧠</div>
-    <div>
-      <h2 style="font-family:var(--fd);font-size:1.4rem;">Análisis de Neutron</h2>
-      <p style="font-size:11px;color:var(--text3);">Tablero interactivo · Los análisis se guardan localmente en tu dispositivo</p>
-    </div>
-  </div>
-  <div id="neutron-cards-container">
-    <div id="neutron-empty" style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:12px;border:1px dashed var(--border);border-radius:var(--r);">
-      <div style="font-size:2rem;margin-bottom:.5rem;">🚀</div>
-      <strong style="color:var(--text2);">Neutron aún no ha generado ningún análisis</strong><br>
-      Pídele en el chat que te haga una tabla, un resumen o una comparativa de tus datos y aparecerá aquí guardada.
-    </div>
-  </div>
-</div>
-</div>
+
 
 <div id="page-alertas" class="page">
 <div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
@@ -408,6 +390,7 @@ main{padding-top:54px;}
       <div class="tl-ev"><div class="tl-dot cardio"></div><div class="tl-date">16 May 2026</div><span class="tl-badge tb-cardio">Cardiología</span><div class="tl-title">Dr. Vielma — Hipotensión Ortostática</div><div class="tl-body">Taquicardia paroxística. FC aumenta +30 lpm al pararse. Ferritina 20.32. Leucocitosis reactivada (12.9).</div></div>
       <div class="tl-ev"><div class="tl-dot crisis"></div><div class="tl-date">19 May 2026</div><span class="tl-badge tb-crisis">Ciclo Menstrual</span><div class="tl-title">Protocolo de Aislamiento</div><div class="tl-body">Menstruación abundante. Implementación de descanso casi absoluto de 2 semanas para prevenir colapso sistémico.</div></div>
       <div class="tl-ev"><div class="tl-dot crisis"></div><div class="tl-date">31 May 2026</div><span class="tl-badge tb-crisis">Agotamiento Agudo</span><div class="tl-title">Descompensación por mínimo esfuerzo</div><div class="tl-body">Caminata <30 min y calor ambiental desencadenan agotamiento rápido, dolor cabeza y opresión torácica. Retorno prematuro a casa.</div></div>
+      <div id="dynamic-timeline"></div>
     </div>
   </div>
 </div>
@@ -417,16 +400,55 @@ main{padding-top:54px;}
 <!-- SINTOMAS -->
 <div id="sintomas" class="section">
   <div class="sec-hdr"><span class="sec-num">05</span><h2 class="sec-title">Sintomatología y Patrones</h2></div>
-  <p style="color:var(--text2);font-size:12px;margin-bottom:1.5rem;">Registro evolutivo de síntomas ingresados a través del Asistente Clínico.</p>
+  <p style="color:var(--text2);font-size:12px;margin-bottom:1.5rem;">Registro evolutivo de síntomas y entradas de bitácora.</p>
   
+  <div style="display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;">
+    <button class="ai-sugg-btn" style="flex:1;min-width:140px;background:var(--accent);color:#0a0e1a;" onclick="document.getElementById('modal-sintoma').style.display='block'">💊 Agregar Síntoma</button>
+    <button class="ai-sugg-btn" style="flex:1;min-width:140px;background:var(--bg3);border:1px solid var(--border);" onclick="document.getElementById('modal-diario').style.display='block'">📝 Entrada Libre</button>
+  </div>
+  
+  <!-- MODAL SINTOMA -->
+  <div id="modal-sintoma" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,14,26,0.9);z-index:2000;padding:2rem 1rem;">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;max-width:500px;margin:0 auto;">
+      <h3 style="margin-bottom:15px;">💊 Registrar Síntoma</h3>
+      <input type="text" id="ms-title" class="ai-input" placeholder="Ej: Cefalea, Mareos, Dolor articular" style="margin-bottom:10px;">
+      <div style="margin-bottom:10px;font-size:12px;">Intensidad (1-10): <span id="ms-val" style="color:var(--accent);font-weight:bold;">5</span></div>
+      <input type="range" id="ms-int" min="1" max="10" value="5" style="width:100%;margin-bottom:10px;" oninput="document.getElementById('ms-val').innerText=this.value">
+      <textarea id="ms-body" class="ai-input" placeholder="Detalles, gatillos (ej. calor, esfuerzo)..." style="height:60px;margin-bottom:10px;"></textarea>
+      <input type="datetime-local" id="ms-date" class="ai-input" style="margin-bottom:15px;">
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:15px;"><input type="checkbox" id="ms-tl"> 📌 Agregar como hito a la cronología</label>
+      <div style="display:flex;gap:10px;">
+        <button class="ai-sugg-btn" style="flex:1;background:var(--green);color:#fff;" onclick="saveManualSymptom()">Guardar</button>
+        <button class="ai-sugg-btn" style="flex:1;" onclick="document.getElementById('modal-sintoma').style.display='none'">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DIARIO -->
+  <div id="modal-diario" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,14,26,0.9);z-index:2000;padding:2rem 1rem;">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;max-width:500px;margin:0 auto;">
+      <h3 style="margin-bottom:15px;">📝 Entrada Libre (Journal)</h3>
+      <input type="text" id="md-title" class="ai-input" placeholder="Título de la entrada" style="margin-bottom:10px;">
+      <textarea id="md-body" class="ai-input" placeholder="Escribe cómo te sientes hoy, observaciones detalladas..." style="height:120px;margin-bottom:10px;"></textarea>
+      <input type="datetime-local" id="md-date" class="ai-input" style="margin-bottom:15px;">
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:15px;"><input type="checkbox" id="md-tl"> 📌 Agregar a cronología</label>
+      <div style="display:flex;gap:10px;">
+        <button class="ai-sugg-btn" style="flex:1;background:var(--green);color:#fff;" onclick="saveManualJournal()">Guardar Entrada</button>
+        <button class="ai-sugg-btn" style="flex:1;" onclick="document.getElementById('modal-diario').style.display='none'">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
   <div class="g2" style="align-items:start;">
     <div>
       <div class="card-title">Evolución de Intensidad</div>
-      <div class="cw" style="height:220px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;"><canvas id="c-sintomas"></canvas></div>
+      <div class="cw" style="height:160px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;margin-bottom:15px;"><canvas id="c-sintomas"></canvas></div>
+      <div class="card-title">Frecuencia de Síntomas</div>
+      <div class="cw" style="height:160px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;"><canvas id="c-frecuencia"></canvas></div>
     </div>
     <div>
       <div class="card-title">Últimos Registros (Memoria Local)</div>
-      <div id="sintomas-list" style="max-height:220px;overflow-y:auto;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;font-size:11px;">
+      <div id="sintomas-list" style="max-height:360px;overflow-y:auto;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;font-size:11px;">
         <div style="color:var(--text3);font-style:italic;text-align:center;padding:20px 0;">No hay síntomas registrados aún.<br>Habla con la IA para empezar.</div>
       </div>
     </div>
@@ -569,6 +591,35 @@ main{padding-top:54px;}
 
   <div id="repo-grid" class="repo-grid">
     <!-- Tarjetas insertadas via JS -->
+  </div>
+</div>
+</div>
+
+<div id="page-ia" class="page">
+<!-- NEUTRON NOTES SECTION (IA DEDICADA) -->
+<div id="neutron-notes-wrapper" style="max-width:1100px;margin:0 auto;padding:2.5rem 2rem;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+    <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--accent));display:flex;align-items:center;justify-content:center;font-size:14px;">🧠</div>
+    <div>
+      <h2 style="font-family:var(--fd);font-size:1.4rem;">Tablero Analítico de Neutron</h2>
+      <p style="font-size:11px;color:var(--text3);">Inteligencia Clínica · Interacciones rápidas y guardado persistente</p>
+    </div>
+  </div>
+  
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:2rem;">
+    <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">Genera un análisis rápido o actualiza la cronología:</p>
+    <div style="display:flex;gap:10px;">
+      <input type="text" id="ia-quick-input" class="ai-input" placeholder="Ej: Agrega a mi cronología que ayer tuve cefalea intensa..." style="flex:1;">
+      <button onclick="sendQuickIA()" class="ai-sugg-btn" style="padding:0 15px;">Enviar</button>
+    </div>
+  </div>
+
+  <div id="neutron-cards-container">
+    <div id="neutron-empty" style="text-align:center;padding:3rem 1rem;color:var(--text3);font-size:12px;border:1px dashed var(--border);border-radius:var(--r);">
+      <div style="font-size:2rem;margin-bottom:.5rem;">🚀</div>
+      <strong style="color:var(--text2);">Neutron aún no ha generado ningún análisis</strong><br>
+      Pídele en el chat que te haga una tabla, un resumen o una comparativa de tus datos y aparecerá aquí guardada.
+    </div>
   </div>
 </div>
 </div>
@@ -719,6 +770,7 @@ let groqKey = localStorage.getItem('groq_key') || 'gsk_nIgSLMsybW4U1pRgGS9RWGdyb
 let geminiKey = localStorage.getItem('gemini_key') || 'AQ.Ab8RN6IeV2zTp6l7Tf6uA3gD_5bfhfbEQf4IJF4zhapzmH31_A';
 let symptomsLog = JSON.parse(localStorage.getItem('stefani_symptoms') || '[]');
 let neutronNotes = JSON.parse(localStorage.getItem('neutron_notes') || '[]');
+let timelineEvents = JSON.parse(localStorage.getItem('timeline_events') || '[]');
 
 const supaUrl = 'https://jksxabgobzfobrvpiuyn.supabase.co';
 const supaKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprc3hhYmdvYnpmb2JydnBpdXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDI3NzMsImV4cCI6MjA5NTg3ODc3M30.ul37DG1R46jMQQoWGM3GtsQ7KzsXOfnpxWKekGQkseA';
@@ -806,6 +858,67 @@ async function saveNeutronNote(title, html) {
   }
 }
 
+async function saveManualSymptom() {
+  const title = document.getElementById('ms-title').value.trim();
+  const intensity = document.getElementById('ms-int').value;
+  const body = document.getElementById('ms-body').value.trim();
+  const dateVal = document.getElementById('ms-date').value;
+  const tl = document.getElementById('ms-tl').checked;
+  if(!title) return alert('Debes ingresar un título o nombre del síntoma.');
+  
+  const d = dateVal ? new Date(dateVal) : new Date();
+  await _saveSymp(title, parseInt(intensity), body, d.getTime(), d.toISOString());
+  if(tl) {
+    timelineEvents.push({ id: Date.now(), date: d.toLocaleDateString(), title: title, body: body, badge: 'Síntoma', timestamp: d.getTime() });
+    localStorage.setItem('timeline_events', JSON.stringify(timelineEvents));
+    renderTimelineEvents();
+  }
+  document.getElementById('modal-sintoma').style.display='none';
+  document.getElementById('ms-title').value = '';
+  document.getElementById('ms-body').value = '';
+}
+
+async function saveManualJournal() {
+  const title = document.getElementById('md-title').value.trim();
+  const body = document.getElementById('md-body').value.trim();
+  const dateVal = document.getElementById('md-date').value;
+  const tl = document.getElementById('md-tl').checked;
+  if(!title || !body) return alert('Debes ingresar un título y contenido.');
+  
+  const d = dateVal ? new Date(dateVal) : new Date();
+  await _saveSymp('📖 ' + title, 0, body, d.getTime(), d.toISOString());
+  if(tl) {
+    timelineEvents.push({ id: Date.now(), date: d.toLocaleDateString(), title: title, body: body, badge: 'Diario', timestamp: d.getTime() });
+    localStorage.setItem('timeline_events', JSON.stringify(timelineEvents));
+    renderTimelineEvents();
+  }
+  document.getElementById('modal-diario').style.display='none';
+  document.getElementById('md-title').value = '';
+  document.getElementById('md-body').value = '';
+}
+
+async function _saveSymp(title, intensity, body, t_num, t_iso) {
+  const s = { id: Date.now(), title, intensity, body, timestamp: t_num };
+  symptomsLog.push(s);
+  renderSymptoms();
+  if(supabaseClient) {
+    try {
+      const { data } = await supabaseClient.from('symptoms').insert([{ title, intensity, body, timestamp: t_iso }]).select();
+      if (data && data[0]) {
+        symptomsLog[symptomsLog.length - 1] = { ...data[0], timestamp: new Date(data[0].timestamp).getTime() };
+      }
+    } catch(err){}
+  }
+  localStorage.setItem('stefani_symptoms', JSON.stringify(symptomsLog));
+}
+
+function deleteSymptom(id) {
+  if(!confirm('¿Seguro que deseas eliminar este registro?')) return;
+  symptomsLog = symptomsLog.filter(s => s.id !== id);
+  localStorage.setItem('stefani_symptoms', JSON.stringify(symptomsLog));
+  renderSymptoms();
+}
+
 function renderSymptoms() {
   const list = document.getElementById('sintomas-list');
   if(!list) return;
@@ -815,9 +928,12 @@ function renderSymptoms() {
   }
   list.innerHTML = symptomsLog.slice().reverse().map(s => `
     <div style="padding:8px 0;border-bottom:1px solid var(--border);">
-      <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
         <strong style="color:var(--text);font-size:12px;">${s.title}</strong>
-        <span class="tag ${s.intensity >= 7 ? 'tpos' : (s.intensity >= 4 ? 'tpnd' : 'tneg')}">Intensidad: ${s.intensity}/10</span>
+        <div>
+          ${s.intensity > 0 ? `<span class="tag ${s.intensity >= 7 ? 'tpos' : (s.intensity >= 4 ? 'tpnd' : 'tneg')}">Intensidad: ${s.intensity}/10</span>` : ''}
+          <button onclick="deleteSymptom(${s.id})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;margin-left:5px;" title="Eliminar">🗑</button>
+        </div>
       </div>
       <div style="color:var(--text3);font-size:9px;font-family:var(--fm);margin-bottom:4px;">${new Date(s.timestamp).toLocaleString()}</div>
       <div style="color:var(--text2);">${s.body}</div>
@@ -828,11 +944,16 @@ function renderSymptoms() {
 }
 
 let sympChart = null;
+let freqChart = null;
 function renderSymptomChart() {
   const ctx = document.getElementById('c-sintomas');
-  if(!ctx) return;
+  const ctxF = document.getElementById('c-frecuencia');
+  if(!ctx || !ctxF) return;
   if(sympChart) sympChart.destroy();
-  const recent = symptomsLog.slice(-10); // Last 10
+  if(freqChart) freqChart.destroy();
+  
+  // Intensidad (filtrar los de intensity > 0)
+  const recent = symptomsLog.filter(s => s.intensity > 0).slice(-10);
   const labels = recent.map(s => new Date(s.timestamp).toLocaleDateString(undefined, {month:'short', day:'numeric'}));
   const data = recent.map(s => s.intensity);
   
@@ -844,9 +965,30 @@ function renderSymptomChart() {
     }]},
     options: bOpts(0, 10)
   });
+
+  // Frecuencia (Agrupar por title, excluyendo diarios si empiezan con 📖)
+  const counts = {};
+  symptomsLog.forEach(s => {
+    if(s.title.startsWith('📖')) return;
+    const t = s.title.toLowerCase().trim();
+    counts[t] = (counts[t] || 0) + 1;
+  });
+  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  
+  freqChart = new Chart(ctxF, {
+    type: 'bar',
+    data: { 
+      labels: sorted.map(i=>i[0]), 
+      datasets: [{
+        label: 'Ocurrencias', data: sorted.map(i=>i[1]), 
+        backgroundColor: '#26c6da', borderRadius: 4
+      }]
+    },
+    options: Object.assign(bOpts(0, Math.max(5, ...sorted.map(i=>i[1]))), { indexAxis: 'y' })
+  });
 }
 // Initial render
-window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); renderRepoCats(); filterRepo(); loadSupabaseData(); });
+window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); renderTimelineEvents(); renderRepoCats(); filterRepo(); loadSupabaseData(); });
 
 // REPOSITORIO LOGIC
 const repoFiles = [
@@ -962,7 +1104,7 @@ async function sendMsg() {
   const loadingId = addMsg('Analizando...', 'bot');
   const historyContext = symptomsLog.slice(-5).map(s => '['+new Date(s.timestamp).toLocaleDateString()+'] '+s.title+' ('+s.intensity+'/10) - '+s.body).join('\n');
   const pageContext = getPageContext();
-  const systemPrompt = 'Tu nombre es Neutron. Asistente clinico de Stefani Ortiz. Tono: amable, corto, directo, nunca hagas parrafos largos de halagos.\n\nTODA LA BITACORA MEDICA DE STEFANI:\n'+pageContext+'\n\nSintomas recientes registrados:\n'+(historyContext||'Ninguno aun.')+'\n\nCAPACIDADES: Puedes incluir opcionalmente UNO de estos bloques JSON al final de tu respuesta:\n\n1. Para registrar un sintoma nuevo:\n```json\n{"symptom": {"title": "Nombre", "intensity": 5, "body": "Descripcion clinica"}}\n```\n\n2. Para publicar un analisis en el tablero (tablas, comparativas, resumenes que ella pida):\n```json\n{"neutron_card": {"title": "Titulo", "html": "<p>Contenido HTML</p>"}}\n```\n\nSolo incluye UN bloque JSON si aplica. Nunca los dos a la vez.';
+  const systemPrompt = 'Tu nombre es Neutron. Asistente clinico de Stefani Ortiz. Tono: amable, corto, directo, nunca hagas parrafos largos de halagos.\n\nTODA LA BITACORA MEDICA DE STEFANI:\n'+pageContext+'\n\nSintomas recientes registrados:\n'+(historyContext||'Ninguno aun.')+'\n\nCAPACIDADES: Puedes incluir opcionalmente UNO de estos bloques JSON al final de tu respuesta:\n\n1. Para registrar un sintoma nuevo:\n```json\n{"symptom": {"title": "Nombre", "intensity": 5, "body": "Descripcion clinica"}}\n```\n\n2. Para publicar un analisis en el tablero:\n```json\n{"neutron_card": {"title": "Titulo", "html": "<p>Contenido HTML</p>"}}\n```\n\n3. Para agregar un evento a la cronologia:\n```json\n{"timeline_event": {"date": "YYYY-MM-DD", "title": "Titulo", "body": "Descripcion", "badge": "tag"}}\n```\n\nSolo incluye UN bloque JSON si aplica. Nunca dos a la vez.';
   try {
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -972,17 +1114,18 @@ async function sendMsg() {
     const data = await res.json();
     if(data.error) throw new Error(data.error.message);
     let reply = data.choices[0].message.content;
-    let symptom = null, neutronCard = null;
+    let symptom = null, neutronCard = null, timelineEvent = null;
     const jsonMatch = reply.match(/```json\n([\s\S]*?)\n```/);
     if (jsonMatch) {
       try {
         const parsed = JSON.parse(jsonMatch[1]);
         if (parsed.symptom) symptom = parsed.symptom;
         if (parsed.neutron_card) neutronCard = parsed.neutron_card;
+        if (parsed.timeline_event) timelineEvent = parsed.timeline_event;
         reply = reply.replace(jsonMatch[0], '').trim();
       } catch(e){}
     }
-    updateMsg(loadingId, reply, symptom, neutronCard);
+    updateMsg(loadingId, reply, symptom, neutronCard, timelineEvent);
   } catch(e) {
     updateMsg(loadingId, 'Error de conexión: ' + e.message);
   }
@@ -999,7 +1142,7 @@ function addMsg(text, type) {
   return id;
 }
 
-function updateMsg(id, text, symptom=null, neutronCard=null) {
+function updateMsg(id, text, symptom=null, neutronCard=null, timelineEvent=null) {
   const div = document.getElementById(id);
   div.innerHTML = text.replace(/\n/g, '<br>');
   if (symptom) {
@@ -1026,6 +1169,18 @@ function updateMsg(id, text, symptom=null, neutronCard=null) {
       <button class="ai-sugg-btn reject" onclick="this.parentElement.remove()">Descartar</button>`;
     div.appendChild(cardDiv);
   }
+  if (timelineEvent) {
+    const te = timelineEvent;
+    const teDiv = document.createElement('div');
+    teDiv.className = 'ai-suggestion';
+    teDiv.style.cssText = 'border-color:rgba(38,198,218,0.4);background:rgba(38,198,218,0.07);';
+    teDiv.innerHTML = `
+      <div class="ai-sugg-title" style="color:var(--teal);">🕒 Agregar a Cronología</div>
+      <div style="font-size:11px;color:var(--text2);"><strong>${te.title}</strong> - ${te.date}</div>
+      <button class="ai-sugg-btn" style="background:var(--teal);color:#0a0e1a;" onclick="acceptTimelineEvent(this, '${te.date}', '${te.title.replace(/'/g,"\\'").replace(/"/g,'&quot;')}', '${te.body.replace(/'/g,"\\'").replace(/"/g,'&quot;')}', '${te.badge}')">✅ Agregar Evento</button>
+      <button class="ai-sugg-btn reject" onclick="this.parentElement.remove()">Descartar</button>`;
+    div.appendChild(teDiv);
+  }
   div.parentElement.scrollTop = div.parentElement.scrollHeight;
 }
 
@@ -1051,6 +1206,60 @@ async function acceptSymptom(title, intensity, body, btn) {
 function acceptNeutronCard(btn, title, html) {
   saveNeutronNote(title, html.replace(/&quot;/g,'"').replace(/\\'/g,"'"));
   btn.parentElement.innerHTML = '<div class="ai-sugg-title" style="color:var(--purple);">✅ Análisis guardado en tu tablero.</div>';
+}
+
+function acceptTimelineEvent(btn, date, title, body, badge) {
+  const tTitle = title.replace(/&quot;/g,'"').replace(/\\'/g,"'");
+  const tBody = body.replace(/&quot;/g,'"').replace(/\\'/g,"'");
+  
+  const newEv = {
+    id: Date.now(),
+    date: date,
+    title: tTitle,
+    body: tBody,
+    badge: badge || 'Evento',
+    timestamp: new Date().getTime()
+  };
+  
+  timelineEvents.push(newEv);
+  localStorage.setItem('timeline_events', JSON.stringify(timelineEvents));
+  renderTimelineEvents();
+  
+  btn.parentElement.innerHTML = '<div class="ai-sugg-title" style="color:var(--teal);">✅ Agregado a Cronología.</div>';
+}
+
+function renderTimelineEvents() {
+  const container = document.getElementById('dynamic-timeline');
+  if(!container) return;
+  container.innerHTML = timelineEvents.map(e => `
+    <div class="tl-ev" id="tev-${e.id}">
+      <div class="tl-dot" style="background:var(--teal);"></div>
+      <div class="tl-date">${e.date}</div>
+      <span class="tl-badge" style="background:rgba(38,198,218,0.15);color:var(--teal);">${e.badge}</span>
+      <div class="tl-title" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>${e.title}</span>
+        <button onclick="deleteTimelineEvent(${e.id})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;" title="Eliminar">🗑</button>
+      </div>
+      <div class="tl-body">${e.body}</div>
+    </div>
+  `).join('');
+}
+
+function deleteTimelineEvent(id) {
+  if(!confirm("¿Seguro que deseas eliminar este evento de la cronología?")) return;
+  timelineEvents = timelineEvents.filter(e => e.id !== id);
+  localStorage.setItem('timeline_events', JSON.stringify(timelineEvents));
+  renderTimelineEvents();
+}
+
+function sendQuickIA() {
+  const qInput = document.getElementById('ia-quick-input');
+  if(!qInput.value.trim()) return;
+  const chatInput = document.getElementById('ai-input');
+  chatInput.value = qInput.value;
+  qInput.value = '';
+  document.getElementById('ai-panel').classList.add('open');
+  sendMsg();
 }
 </script>
 <script>
