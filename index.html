@@ -611,14 +611,13 @@ main{padding-top:54px;}
 <script>
 // SAFE NAV & SPA ROUTING — standalone so it ALWAYS works regardless of script below
 function showPage(pageId) {
-  // Update desktop nav
   document.querySelectorAll('.nl').forEach(function(b) { b.classList.remove('active'); });
-  var activeNl = document.querySelector('.nl[onclick="showPage(\\''+pageId+'\\')"]');
+  var activeNl = document.querySelector('.nl[onclick="showPage(\''+pageId+'\')"]');
   if(activeNl) activeNl.classList.add('active');
   
   // Update mobile nav
   document.querySelectorAll('.mn-btn').forEach(function(b) { b.classList.remove('active'); });
-  var activeMn = document.querySelector('.mn-btn[onclick="showPage(\\''+pageId+'\\')"]');
+  var activeMn = document.querySelector('.mn-btn[onclick="showPage(\''+pageId+'\')"]');
   if(activeMn) activeMn.classList.add('active');
   
   // Show page
