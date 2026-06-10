@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Importador de Datos Supabase</title>
+<style>
+  body { background: #0a0e1a; color: #e8eaf2; font-family: 'DM Sans', sans-serif; text-align: center; padding-top: 50px; }
+  .btn { padding: 15px 30px; font-size: 18px; border-radius: 8px; border: none; background: #66bb6a; color: #fff; cursor: pointer; font-weight: bold; }
+  #log { margin-top: 30px; color: #8892b0; font-family: monospace; white-space: pre-wrap; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto; background: #0f1524; padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+</style>
+</head>
+<body>
+  <h2>📥 Sincronizador de Datos Médicos (Junio 2026)</h2>
+  <p>Esto enviará los últimos reportes a la Nube (Supabase).</p>
+  <button class="btn" onclick="empezar()">Sincronizar a la Nube Ahora</button>
+  <div id="log">Esperando...</div>
+
+<script>
+const supaUrl = 'https://jksxabgobzfobrvpiuyn.supabase.co';
+const supaKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprc3hhYmdvYnpmb2JydnBpdXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDI3NzMsImV4cCI6MjA5NTg3ODc3M30.ul37DG1R46jMQQoWGM3GtsQ7KzsXOfnpxWKekGQkseA';
+const headers = { 'apikey': supaKey, 'Authorization': 'Bearer ' + supaKey, 'Content-Type': 'application/json' };
+
+const tlEvents = [
+  { date: '06/06/2026', title: 'Cita Hematología (Dra. Chacón)', body: 'Dx: Ferropenia, SOP. Plan: Hierro Carboximaltosa 1gr EV, B12 1000mcg IM. Intentos de vía fallidos (infiltración), solo recibió 500mg de hierro.', badge: 'Hematología', timestamp: new Date('2026-06-06T12:00:00Z').toISOString() },
+  { date: '08/06/2026', title: 'Fiebre Post-Infiltración + ATB', body: 'Fiebre hasta 39.5°C y escalofríos. Vías rotas (yelco 20). Inicio de Ciprofloxacina c/12h y Clindamicina c/6h oral.', badge: 'Evento', timestamp: new Date('2026-06-08T20:00:00Z').toISOString() },
+  { date: '10/06/2026', title: 'Reinicio Acetazolamida', body: 'Fiebre cedió el 09/06. Síntomas fuertes de HII (presión orbitaria, vista oscura). Se retoma acetazolamida tras suspensión por deshidratación menstrual.', badge: 'Medicamento', timestamp: new Date('2026-06-10T08:00:00Z').toISOString() }
+];
+
+const symptoms = [
+  { title: 'Presión Intracraneana Aguda', intensity: 8, body: 'Presión en la cabeza, oscurecimiento de colores ojo derecho, presión en oídos. Fiebre resuelta, retomando acetazolamida.', timestamp: new Date().toISOString() }
+];
+
+async function empezar() {
+  document.getElementById('log').innerText = 'Enviando reportes...';
+  try {
+    const res1 = await fetch(supaUrl + '/rest/v1/timeline_events', { method: 'POST', headers, body: JSON.stringify(tlEvents) });
+    const res2 = await fetch(supaUrl + '/rest/v1/symptoms', { method: 'POST', headers, body: JSON.stringify(symptoms) });
+    document.getElementById('log').innerHTML = '<span style="color:#66bb6a">✅ ¡Todo Subido con Éxito!</span>\n\nYa puedes regresar a index.html y verás toda la cronología y síntomas actualizados. Ya puedes eliminar este archivo (importador.html).';
+  } catch(e) {
+    document.getElementById('log').innerText = '❌ Error: ' + e.message;
+  }
+}
+</script>
+</body>
+</html>

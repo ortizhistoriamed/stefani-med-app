@@ -948,9 +948,13 @@ async function _saveSymp(title, intensity, body, t_num, t_iso) {
 
 function deleteSymptom(id) {
   if(!confirm('¿Seguro que deseas eliminar este registro?')) return;
-  symptomsLog = symptomsLog.filter(s => s.id !== id);
+  const symp = symptomsLog.find(s => s.id == id);
+  symptomsLog = symptomsLog.filter(s => s.id != id);
   localStorage.setItem('stefani_symptoms', JSON.stringify(symptomsLog));
   renderSymptoms();
+  if (symp && symp.id && supabaseClient) {
+    supabaseClient.from('symptoms').delete().eq('id', symp.id).then(()=>{});
+  }
 }
 
 function renderSymptoms() {
