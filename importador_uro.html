@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Importador Uroanálisis</title></head>
+<body>
+<button id="btn" onclick="empezar()">Subir Uroanálisis</button>
+<div id="log"></div>
+<script>
+const supaUrl = 'https://jksxabgobzfobrvpiuyn.supabase.co';
+const supaKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imprc3hhYmdvYnpmb2JydnBpdXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDI3NzMsImV4cCI6MjA5NTg3ODc3M30.ul37DG1R46jMQQoWGM3GtsQ7KzsXOfnpxWKekGQkseA';
+const headers = { 'apikey': supaKey, 'Authorization': 'Bearer ' + supaKey, 'Content-Type': 'application/json' };
+
+const tlEvents = [
+  { date: '02/06/2026', title: '🔬 Uroanálisis (Hema-lab)', body: 'Resultado de Infección Urinaria activa: Leucocituria positiva (2+, 5-7xCPO), Bacterias moderadas, aspecto turbio. Esto explica como origen primario o concomitante la fiebre reciente que trataron con Ciprofloxacina.', badge: 'Laboratorio', timestamp: new Date('2026-06-02T12:00:00Z').toISOString() }
+];
+
+async function empezar() {
+  try {
+    await fetch(supaUrl + '/rest/v1/timeline_events', { method: 'POST', headers, body: JSON.stringify(tlEvents) });
+    document.getElementById('log').innerText = '✅ UROANÁLISIS GUARDADO';
+  } catch(e) {
+    document.getElementById('log').innerText = '❌ Error';
+  }
+}
+</script>
+</body>
+</html>
