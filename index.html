@@ -803,12 +803,20 @@ async function loadSupabaseData() {
     } else if (neutronNotes.length > 0) {
       await supabaseClient.from('neutron_notes').insert(neutronNotes.map(n => ({ title: n.title, html: n.html, timestamp: new Date(n.timestamp).toISOString() })));
     }
+
+    const { data: tlData } = await supabaseClient.from('timeline_events').select('*').order('timestamp', { ascending: true });
+    if (tlData && tlData.length > 0) {
+      timelineEvents = tlData.map(t => ({ ...t, timestamp: new Date(t.timestamp).getTime() }));
+    } else if (timelineEvents.length > 0) {
+      await supabaseClient.from('timeline_events').insert(timelineEvents.map(t => ({ date: t.date, title: t.title, body: t.body, badge: t.badge, timestamp: new Date(t.timestamp).toISOString() })));
+    }
   } catch (err) {
     console.error('Error cargando Supabase:', err);
   }
 
   renderSymptoms();
   renderNeutronNotes();
+  renderTimelineEvents();
 }
 
 function getPageContext() {
@@ -899,9 +907,7 @@ async function saveManualSymptom() {
   const d = dateVal ? new Date(dateVal) : new Date();
   await _saveSymp(title, parseInt(intensity), body, d.getTime(), d.toISOString());
   if(tl) {
-    timelineEvents.push({ id: Date.now(), date: d.toLocaleDateString(), title: title, body: body, badge: 'Síntoma', timestamp: d.getTime() });
-    localStorage.setItem('timeline_events', JSON.stringify(timelineEvents));
-    renderTimelineEvents();
+    await _saveTimelineEvent(d.toLocaleDateString(), title, body, 'Síntoma', d.getTime(), d.toISOString());
   }
   document.getElementById('modal-sintoma').style.display='none';
   document.getElementById('ms-title').value = '';
@@ -918,9 +924,7 @@ async function saveManualJournal() {
   const d = dateVal ? new Date(dateVal) : new Date();
   await _saveSymp('📖 ' + title, 0, body, d.getTime(), d.toISOString());
   if(tl) {
-    timelineEvents.push({ id: Date.now(), date: d.toLocaleDateString(), title: title, body: body, badge: 'Diario', timestamp: d.getTime() });
-    localStorage.setItem('timeline_events', JSON.stringify(timelineEvents));
-    renderTimelineEvents();
+    await _saveTimelineEvent(d.toLocaleDateString(), title, body, 'Diario', d.getTime(), d.toISOString());
   }
   document.getElementById('modal-diario').style.display='none';
   document.getElementById('md-title').value = '';
@@ -1245,24 +1249,29 @@ function acceptNeutronCard(btn, title, html) {
   btn.parentElement.innerHTML = '<div class="ai-sugg-title" style="color:var(--purple);">✅ Análisis guardado en tu tablero.</div>';
 }
 
-function acceptTimelineEvent(btn, date, title, body, badge) {
+async function acceptTimelineEvent(btn, date, title, body, badge) {
   const tTitle = title.replace(/&quot;/g,'"').replace(/\\'/g,"'");
   const tBody = body.replace(/&quot;/g,'"').replace(/\\'/g,"'");
   
-  const newEv = {
-    id: Date.now(),
-    date: date,
-    title: tTitle,
-    body: tBody,
-    badge: badge || 'Evento',
-    timestamp: new Date().getTime()
-  };
+  await _saveTimelineEvent(date, tTitle, tBody, badge || 'Evento', new Date().getTime(), new Date().toISOString());
   
+  btn.parentElement.innerHTML = '<div class="ai-sugg-title" style="color:var(--teal);">✅ Agregado a Cronología y Nube.</div>';
+}
+
+async function _saveTimelineEvent(date, title, body, badge, t_num, t_iso) {
+  const newEv = { id: Date.now(), date, title, body, badge, timestamp: t_num };
   timelineEvents.push(newEv);
   localStorage.setItem('timeline_events', JSON.stringify(timelineEvents));
   renderTimelineEvents();
   
-  btn.parentElement.innerHTML = '<div class="ai-sugg-title" style="color:var(--teal);">✅ Agregado a Cronología.</div>';
+  if(supabaseClient) {
+    try {
+      const { data } = await supabaseClient.from('timeline_events').insert([{ date, title, body, badge, timestamp: t_iso }]).select();
+      if (data && data[0]) {
+        timelineEvents[timelineEvents.length - 1] = { ...data[0], timestamp: new Date(data[0].timestamp).getTime() };
+      }
+    } catch(err){}
+  }
 }
 
 function renderTimelineEvents() {
@@ -1284,9 +1293,13 @@ function renderTimelineEvents() {
 
 function deleteTimelineEvent(id) {
   if(!confirm("¿Seguro que deseas eliminar este evento de la cronología?")) return;
+  const ev = timelineEvents.find(e => e.id === id);
   timelineEvents = timelineEvents.filter(e => e.id !== id);
   localStorage.setItem('timeline_events', JSON.stringify(timelineEvents));
   renderTimelineEvents();
+  if (ev && ev.id && supabaseClient) {
+    supabaseClient.from('timeline_events').delete().eq('id', ev.id).then(()=>{});
+  }
 }
 
 function sendQuickIA() {
