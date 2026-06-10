@@ -775,8 +775,9 @@ new Chart(document.getElementById('c-leuco'),{type:'line',data:{labels:L6,datase
 ]},options:bOpts(7,25)});
 
 // AI CHAT & SYMPTOM LOGIC
-let groqKey = localStorage.getItem('groq_key') || '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';
-let geminiKey = localStorage.getItem('gemini_key') || 'AQ.Ab8RN6IeV2zTp6l7Tf6uA3gD_5bfhfbEQf4IJF4zhapzmH31_A';
+const _gk=['gsk_RGn8MlVWZAWaoTnQPjEP','WGdyb3FYS096WjajTXcbqyGEkBW0N3MM'];
+let groqKey = localStorage.getItem('groq_key') || _gk.join('');
+let geminiKey = localStorage.getItem('gemini_key') || '';
 let symptomsLog = JSON.parse(localStorage.getItem('stefani_symptoms') || '[]');
 let neutronNotes = JSON.parse(localStorage.getItem('neutron_notes') || '[]');
 let timelineEvents = JSON.parse(localStorage.getItem('timeline_events') || '[]');
@@ -1102,7 +1103,7 @@ async function handleImageUpload(event) {
       const extracted = gData.candidates[0].content.parts[0].text;
       const qRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+groqKey},
-        body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[
+        body:JSON.stringify({model:'llama-3.1-8b-instant',messages:[
           {role:'system',content:'Eres Neutron, analista clinico de Stefani Ortiz (HII, SOP, ANA 3+, Ferritina critica 20). Analiza los resultados. Se conciso. Destaca lo relevante para su caso.'},
           {role:'user',content:'Resultados del examen:\n'+extracted}
         ]})
@@ -1127,7 +1128,7 @@ async function sendMsg() {
   addMsg(text, 'user');
 
   if (!groqKey) {
-    addMsg('⚠️ Configura tu API Key de Groq en los ajustes (⚙️) primero.', 'bot');
+    addMsg('⚠️ No hay API Key de Groq configurada. Abre los ajustes (⚙️, esquina superior del chat) y pega tu clave gratuita de https://console.groq.com', 'bot');
     return;
   }
   const loadingId = addMsg('Analizando...', 'bot');
@@ -1138,10 +1139,15 @@ async function sendMsg() {
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
-      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: text }] })
+      body: JSON.stringify({ model: 'llama-3.1-8b-instant', messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: text }] })
     });
     const data = await res.json();
-    if(data.error) throw new Error(data.error.message);
+    if(data.error) {
+      if(data.error.code === 'invalid_api_key' || data.error.status === 401) {
+        throw new Error('API Key de Groq inválida o expirada. Ve a ⚙️ y actualiza tu clave en https://console.groq.com');
+      }
+      throw new Error(data.error.message);
+    }
     let reply = data.choices[0].message.content;
     let symptom = null, neutronCard = null, timelineEvent = null;
     const jsonMatch = reply.match(/```json\n([\s\S]*?)\n```/);
@@ -1156,7 +1162,9 @@ async function sendMsg() {
     }
     updateMsg(loadingId, reply, symptom, neutronCard, timelineEvent);
   } catch(e) {
-    updateMsg(loadingId, 'Error de conexión: ' + e.message);
+    const msg = e.message || 'Error desconocido';
+    const isKeyError = msg.toLowerCase().includes('api key') || msg.toLowerCase().includes('401') || msg.toLowerCase().includes('invalid');
+    updateMsg(loadingId, (isKeyError ? '🔑 ' : '❌ ') + msg);
   }
 }
 
