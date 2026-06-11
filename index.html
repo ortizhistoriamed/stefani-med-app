@@ -1001,6 +1001,23 @@ async function _saveSymp(title, intensity, body, t_num, t_iso) {
   localStorage.setItem('stefani_symptoms', JSON.stringify(symptomsLog));
 }
 
+function editSymptom(id) {
+  const symp = symptomsLog.find(s => s.id == id);
+  if(!symp) return;
+  const newTitle = prompt('Editar título del síntoma/entrada:', symp.title);
+  if(newTitle === null || newTitle.trim() === '') return;
+  const newBody = prompt('Editar detalles/gatillos:', symp.body);
+  if(newBody === null) return;
+  
+  symp.title = newTitle;
+  symp.body = newBody;
+  localStorage.setItem('stefani_symptoms', JSON.stringify(symptomsLog));
+  renderSymptoms();
+  if(supabaseClient && symp.id) {
+    supabaseClient.from('symptoms').update({ title: newTitle, body: newBody }).eq('id', symp.id).then(()=>{});
+  }
+}
+
 function deleteSymptom(id) {
   if(!confirm('¿Seguro que deseas eliminar este registro?')) return;
   const symp = symptomsLog.find(s => s.id == id);
@@ -1025,7 +1042,8 @@ function renderSymptoms() {
         <strong style="color:var(--text);font-size:12px;">${s.title}</strong>
         <div>
           ${s.intensity > 0 ? `<span class="tag ${s.intensity >= 7 ? 'tpos' : (s.intensity >= 4 ? 'tpnd' : 'tneg')}">Intensidad: ${s.intensity}/10</span>` : ''}
-          <button onclick="deleteSymptom(${s.id})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;margin-left:5px;" title="Eliminar">🗑</button>
+          <button onclick="editSymptom('${s.id}')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:12px;margin-left:5px;" title="Editar">✏️</button>
+          <button onclick="deleteSymptom('${s.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;margin-left:5px;" title="Eliminar">🗑</button>
         </div>
       </div>
       <div style="color:var(--text3);font-size:9px;font-family:var(--fm);margin-bottom:4px;">${new Date(s.timestamp).toLocaleString()}</div>
