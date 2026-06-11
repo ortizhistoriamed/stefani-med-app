@@ -233,6 +233,33 @@ body.consulta-mode .nl[onclick*="page-ia"],
 body.consulta-mode .mn-btn[onclick*="page-ia"],
 body.consulta-mode .abox:not(.orange) { display: none !important; }
 
+/* NUEVAS FUNCIONES */
+@media print {
+  nav, .mobile-nav, #ai-chat-btn, #ai-panel, .btn-save, button, #pwa-banner, #toast, .g-search, .hero-badge, .ai-input-area { display: none !important; }
+  body { background: white !important; color: black !important; font-size: 11px; }
+  .page { display: block !important; padding: 10px 0 !important; page-break-after: auto; margin-bottom: 20px; }
+  .card, .status-panel, .abox { border: 1px solid #ccc !important; background: white !important; page-break-inside: avoid; margin-bottom: 10px; }
+  * { color: black !important; text-shadow: none !important; box-shadow: none !important; }
+  h1, h2, .sec-title { color: #222 !important; }
+  .tl-body { color: #333 !important; }
+}
+
+.g-search { position:relative; display:flex; align-items:center; }
+.g-input { background:var(--bg3); border:1px solid var(--border); color:var(--text); padding:4px 12px 4px 25px; border-radius:20px; font-size:11px; width:120px; font-family:var(--fb); transition:width .2s;}
+.g-input:focus { width: 180px; border-color:var(--accent); outline:none; }
+.g-icon { position:absolute; left:8px; font-size:11px; }
+.g-results { position:absolute; top:35px; right:0; width:280px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--r); padding:10px; box-shadow:0 10px 30px rgba(0,0,0,0.5); display:none; max-height:400px; overflow-y:auto; z-index:2000; }
+.g-results.open { display:block; }
+.gr-item { padding:8px; border-bottom:1px solid var(--border); cursor:pointer; }
+.gr-item:last-child { border-bottom:none; }
+.gr-item:hover { background:var(--bg3); }
+.gr-cat { font-size:9px; color:var(--accent); text-transform:uppercase; font-weight:bold; }
+.gr-title { font-size:12px; font-weight:600; color:var(--text); }
+.gr-desc { font-size:11px; color:var(--text2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.inp-sm { background:var(--bg3); border:1px solid var(--border); color:var(--text); padding:6px 10px; border-radius:var(--rs); font-size:12px; width:100%; font-family:var(--fb); outline:none; margin-bottom:8px; }
+.inp-sm:focus { border-color:var(--accent); }
+
 /* RECORDATORIOS */
 .rem-item { display:flex; justify-content:space-between; align-items:center; background:var(--bg3); padding:8px 12px; border-radius:var(--rs); border:1px solid var(--border); margin-bottom:6px; font-size:12px; }
 .rem-time { font-family:var(--fm); font-weight:bold; color:var(--accent); }
@@ -254,6 +281,10 @@ body.consulta-mode .abox:not(.orange) { display: none !important; }
 </div>
 <div class="prog" id="prog"></div>
 
+<!-- TOAST UI -->
+<div id="toast" style="display:none;position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--accent);color:#0a0e1a;padding:12px 24px;border-radius:30px;font-weight:600;font-size:13px;z-index:9999;box-shadow:0 8px 25px rgba(0,0,0,0.5);text-align:center;max-width:90%;animation:toastSlide 0.3s ease-out;"></div>
+<style>@keyframes toastSlide{from{transform:translate(-50%,20px);opacity:0;}to{transform:translate(-50%,0);opacity:1;}}</style>
+
 <nav>
   <div class="nav-brand">
     <div class="nav-logo">SO</div>
@@ -262,12 +293,19 @@ body.consulta-mode .abox:not(.orange) { display: none !important; }
   <div class="nav-links">
     <button class="nl active" onclick="showPage('page-inicio')"><svg viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-14v-9h-3z"/></svg>Inicio</button>
     <button class="nl" onclick="showPage('page-alertas')"><svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.83L19.5 19h-15L12 5.83zM11 10v5h2v-5h-2zm0 7v2h2v-2h-2z"/></svg>Alertas</button>
-    <button class="nl" onclick="showPage('page-cronologia')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Cronología</button>
+    <button class="nl" onclick="showPage('page-cronologia')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Crono</button>
     <button class="nl" onclick="showPage('page-sintomas')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
-    <button class="nl" onclick="showPage('page-resultados')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Resultados</button>
-    <button class="nl" onclick="showPage('page-archivo')"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>Archivo</button>
-    <button class="nl" onclick="showPage('page-ia')"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 17.93V18a1 1 0 0 0-2 0v1.93A8 8 0 0 1 4.07 13H6a1 1 0 0 0 0-2H4.07A8 8 0 0 1 11 4.07V6a1 1 0 0 0 2 0V4.07A8 8 0 0 1 19.93 11H18a1 1 0 0 0 0 2h1.93A8 8 0 0 1 13 19.93z"/></svg>Neutron IA</button>
-    <button class="btn-save" style="margin-right:6px;" onclick="toggleConsultaMode()">🩺 Modo Consulta</button>
+    <button class="nl" onclick="showPage('page-medicamentos')"><svg viewBox="0 0 24 24"><path d="M6 3h12v2H6zm11 3H7c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-1 9H8V8h8v7z"/></svg>Meds</button>
+    <button class="nl" onclick="showPage('page-resultados')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Labs</button>
+    
+    <div class="g-search" style="margin-left:5px;margin-right:5px;">
+      <span class="g-icon">🔍</span>
+      <input type="text" class="g-input" id="gsc-input" placeholder="Buscar en todo..." oninput="globalSearch()">
+      <div class="g-results" id="gsc-results"></div>
+    </div>
+
+    <button class="btn-save" style="margin-right:4px;" onclick="imprimirPDF()">📄 PDF</button>
+    <button class="btn-save" style="margin-right:4px;" onclick="toggleConsultaMode()">🩺 Modo Consulta</button>
     <button class="btn-save" onclick="saveHTML()">💾 Guardar</button>
   </div>
 </nav>
@@ -276,8 +314,8 @@ body.consulta-mode .abox:not(.orange) { display: none !important; }
   <button class="mn-btn active" onclick="showPage('page-inicio')"><svg viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-14v-9h-3z"/></svg>Inicio</button>
   <button class="mn-btn" onclick="showPage('page-cronologia')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>Crono</button>
   <button class="mn-btn" onclick="showPage('page-sintomas')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Síntomas</button>
+  <button class="mn-btn" onclick="showPage('page-medicamentos')"><svg viewBox="0 0 24 24"><path d="M6 3h12v2H6zm11 3H7c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-1 9H8V8h8v7z"/></svg>Meds</button>
   <button class="mn-btn" onclick="showPage('page-resultados')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Labs</button>
-  <button class="mn-btn" onclick="showPage('page-archivo')"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>Archivo</button>
   <button class="mn-btn" onclick="showPage('page-ia')"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 17.93V18a1 1 0 0 0-2 0v1.93A8 8 0 0 1 4.07 13H6a1 1 0 0 0 0-2H4.07A8 8 0 0 1 11 4.07V6a1 1 0 0 0 2 0V4.07A8 8 0 0 1 19.93 11H18a1 1 0 0 0 0 2h1.93A8 8 0 0 1 13 19.93z"/></svg>IA</button>
 </div>
 
@@ -306,18 +344,6 @@ body.consulta-mode .abox:not(.orange) { display: none !important; }
     <div class="sp-row"><span class="sp-label">DHT</span><span class="sp-val s-al">51.5 Elevada</span></div>
     <div class="sp-row"><span class="sp-label">Insulina basal</span><span class="sp-val s-al">13.1 Elevada</span></div>
     <div class="sp-row"><span class="sp-label">LCR Celularidad</span><span class="sp-val s-wn">5.0 Límite alto (18/09)</span></div>
-  </div>
-  <div class="status-panel" id="panel-recordatorios" style="margin-top:1.5rem;">
-    <div class="sp-title" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
-      <span>Recordatorios ⏰</span>
-      <button onclick="activateNotifications()" style="background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:10px;padding:3px 6px;border-radius:4px;" title="Activar Notificaciones">Activar 🔔</button>
-    </div>
-    <div id="reminders-list" style="margin-bottom:10px;"></div>
-    <div style="display:flex; gap:5px;">
-      <input type="time" id="new-rem-time" class="ai-input" style="padding:6px; font-size:11px; width:75px;">
-      <input type="text" id="new-rem-text" class="ai-input" placeholder="Med..." style="padding:6px; font-size:11px; flex:1;">
-      <button onclick="addReminder()" class="btn-save" style="border:none; background:var(--bg3); color:var(--text); padding:6px 10px;">➕</button>
-    </div>
   </div>
 </div>
 
@@ -502,9 +528,13 @@ body.consulta-mode .abox:not(.orange) { display: none !important; }
 
   <div class="g2" style="align-items:start;">
     <div>
-      <div class="card-title">Evolución de Intensidad</div>
+      <div class="card-title">Evolución Promedio (Tendencia)</div>
+      <div class="cw" style="height:160px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;margin-bottom:15px;"><canvas id="c-sint-trend"></canvas></div>
+      
+      <div class="card-title">Intensidad por Síntoma (Últimos)</div>
       <div class="cw" style="height:160px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;margin-bottom:15px;"><canvas id="c-sintomas"></canvas></div>
-      <div class="card-title">Frecuencia de Síntomas</div>
+      
+      <div class="card-title">Frecuencia Acumulada</div>
       <div class="cw" style="height:160px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;"><canvas id="c-frecuencia"></canvas></div>
     </div>
     <div>
@@ -514,6 +544,34 @@ body.consulta-mode .abox:not(.orange) { display: none !important; }
       </div>
     </div>
   </div>
+  </div>
+</div>
+</div>
+
+<div id="page-medicamentos" class="page">
+<div class="section">
+  <div class="sec-hdr"><span class="sec-num">09</span><h2 class="sec-title">Medicamentos Activos</h2></div>
+  <p style="color:var(--text2);font-size:12px;margin-bottom:1.5rem;">Registro de medicación continua actual.</p>
+  
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-title" style="margin-bottom:10px;">✚ Agregar Medicamento</div>
+    <div class="g3" style="align-items:end;">
+      <div><label style="font-size:10px;text-transform:uppercase;color:var(--text3);margin-bottom:4px;display:block;">Nombre</label><input type="text" id="inp-med-name" class="inp-sm" placeholder="Ej: Glucofage"></div>
+      <div><label style="font-size:10px;text-transform:uppercase;color:var(--text3);margin-bottom:4px;display:block;">Dosis</label><input type="text" id="inp-med-dose" class="inp-sm" placeholder="Ej: 500mg"></div>
+      <div>
+        <label style="font-size:10px;text-transform:uppercase;color:var(--text3);margin-bottom:4px;display:block;">Frecuencia</label>
+        <div style="display:flex;gap:5px;">
+          <input type="text" id="inp-med-freq" class="inp-sm" placeholder="Ej: 1 al día" style="flex:1;">
+          <button onclick="addMed()" class="btn-save" style="padding:6px 12px; height:34px;">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="it" style="background:var(--bg2); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; display:table;">
+    <thead><tr><th>Medicación</th><th>Dosis</th><th>Frecuencia</th><th>Inicio</th><th>Acción</th></tr></thead>
+    <tbody id="meds-list"></tbody>
+  </table>
 </div>
 </div>
 
@@ -611,6 +669,37 @@ body.consulta-mode .abox:not(.orange) { display: none !important; }
     <div>
       <div class="ct">Fórmula Leucocitaria (% Neutro vs Linfocitos)</div>
       <div class="cw" style="height:220px;"><canvas id="c-inmune"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- SIGNOS VITALES -->
+<div id="vit-section" class="section">
+  <div class="sec-hdr"><span class="sec-num">10</span><h2 class="sec-title">Registro de Signos Vitales</h2></div>
+  <div class="g2" style="align-items:start;">
+    <div class="card">
+      <div class="card-title">✚ Nuevo Registro</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div><label style="font-size:10px;color:var(--text3);">Fecha</label><input type="date" id="inp-vit-date" class="inp-sm"></div>
+        <div><label style="font-size:10px;color:var(--text3);">Frecuencia Cardíaca</label><input type="number" id="inp-vit-hr" class="inp-sm" placeholder="lpm"></div>
+        <div><label style="font-size:10px;color:var(--text3);">Presión Sistólica</label><input type="number" id="inp-vit-sys" class="inp-sm" placeholder="mmHg"></div>
+        <div><label style="font-size:10px;color:var(--text3);">Presión Diastólica</label><input type="number" id="inp-vit-dia" class="inp-sm" placeholder="mmHg"></div>
+        <div style="grid-column: span 2;">
+          <button onclick="addVitalSign()" class="btn-save" style="width:100%;padding:8px;">Guardar Registro</button>
+        </div>
+      </div>
+      <div style="margin-top:15px; max-height:200px; overflow-y:auto;">
+        <table class="it">
+          <thead><tr><th>Fecha</th><th>PA</th><th>FC</th><th></th></tr></thead>
+          <tbody id="vitals-list"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+       <div class="card-title">Tendencia de Presión y Pulso</div>
+       <div class="cw" style="height:280px;"><canvas id="c-vitals"></canvas></div>
     </div>
   </div>
 </div>
@@ -917,6 +1006,22 @@ async function loadSupabaseData() {
     } else if (timelineEvents.length > 0) {
       await supabaseClient.from('timeline_events').insert(timelineEvents.map(t => ({ date: t.date, title: t.title, body: t.body, badge: t.badge, timestamp: new Date(t.timestamp).toISOString() })));
     }
+
+    const { data: medsData } = await supabaseClient.from('medications').select('*');
+    if (medsData && medsData.length > 0) {
+      medsLog = medsData;
+      saveMedsLocal();
+    } else if (medsLog.length > 0) {
+      await supabaseClient.from('medications').insert(medsLog);
+    }
+
+    const { data: vitalsData } = await supabaseClient.from('vital_signs').select('*');
+    if (vitalsData && vitalsData.length > 0) {
+      vitalsLog = vitalsData;
+      saveVitalsLocal();
+    } else if (vitalsLog.length > 0) {
+      await supabaseClient.from('vital_signs').insert(vitalsLog);
+    }
   } catch (err) {
     console.error('Error cargando Supabase:', err);
   }
@@ -1127,14 +1232,17 @@ function renderSymptoms() {
 
 let sympChart = null;
 let freqChart = null;
+let trendChart = null;
 function renderSymptomChart() {
   const ctx = document.getElementById('c-sintomas');
   const ctxF = document.getElementById('c-frecuencia');
-  if(!ctx || !ctxF) return;
+  const ctxT = document.getElementById('c-sint-trend');
+  if(!ctx || !ctxF || !ctxT) return;
   if(sympChart) sympChart.destroy();
   if(freqChart) freqChart.destroy();
+  if(trendChart) trendChart.destroy();
   
-  // Intensidad (filtrar los de intensity > 0)
+  // Intensidad Individual (últimos 10)
   const recent = symptomsLog.filter(s => s.intensity > 0).slice(-10);
   const labels = recent.map(s => new Date(s.timestamp).toLocaleDateString(undefined, {month:'short', day:'numeric'}));
   const data = recent.map(s => s.intensity);
@@ -1148,7 +1256,29 @@ function renderSymptomChart() {
     options: bOpts(0, 10)
   });
 
-  // Frecuencia (Agrupar por title, excluyendo diarios si empiezan con 📖)
+  // Tendencia Promedio Diaria
+  const agrp = {};
+  symptomsLog.forEach(s => {
+    if(s.intensity > 0) {
+      const dLabel = new Date(s.timestamp).toLocaleDateString(undefined, {month:'short', day:'numeric'});
+      if(!agrp[dLabel]) agrp[dLabel] = {sum:0, count:0};
+      agrp[dLabel].sum += s.intensity;
+      agrp[dLabel].count++;
+    }
+  });
+  const tLabels = Object.keys(agrp).slice(-14); // últimos 14 días
+  const tData = tLabels.map(l => (agrp[l].sum / agrp[l].count).toFixed(1));
+
+  trendChart = new Chart(ctxT, {
+    type: 'line',
+    data: { labels: tLabels, datasets: [{
+      label: 'Promedio Intensidad Diaria', data: tData, borderColor: '#64b5f6', backgroundColor: 'rgba(100,181,246,0.1)',
+      tension: 0.3, pointRadius: 3, fill: true
+    }]},
+    options: bOpts(0, 10)
+  });
+
+  // Frecuencia Acumulada
   const counts = {};
   symptomsLog.forEach(s => {
     if(s.title.startsWith('📖')) return;
@@ -1170,7 +1300,7 @@ function renderSymptomChart() {
   });
 }
 // Initial render
-window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); renderTimelineEvents(); renderRepoCats(); filterRepo(); loadSupabaseData(); });
+window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); renderTimelineEvents(); renderRepoCats(); filterRepo(); loadSupabaseData(); renderMeds(); renderVitals(); });
 
 // REPOSITORIO LOGIC
 const repoFiles = [
@@ -1460,16 +1590,200 @@ function sendQuickIA() {
   sendMsg();
 }
 
-// --- NUEVAS FUNCIONES: MODO CONSULTA, CSV, TIMELINE FILTER Y RECORDATORIOS ---
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  if(!t) return;
+  t.innerText = msg;
+  t.style.background = isError ? 'var(--red)' : 'var(--accent)';
+  t.style.color = isError ? '#fff' : '#0a0e1a';
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 4500);
+}
+
+// --- MEDS GLOBALS & FUNCTIONS ---
+let medsLog = JSON.parse(localStorage.getItem('meds_log') || '[]');
+
+function saveMedsLocal() {
+  localStorage.setItem('meds_log', JSON.stringify(medsLog));
+}
+
+function renderMeds() {
+  const tbody = document.getElementById('meds-list');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  medsLog.forEach(m => {
+    tbody.innerHTML += `<tr>
+      <td style="color:var(--text);font-weight:600;">${m.name}</td>
+      <td style="font-family:var(--fm);">${m.dose}</td>
+      <td>${m.frequency}</td>
+      <td style="font-family:var(--fm);">${m.start_date || new Date().toLocaleDateString()}</td>
+      <td><button onclick="deleteMed('${m.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;padding:2px 8px;">🗑</button></td>
+    </tr>`;
+  });
+}
+
+async function addMed() {
+  const name = document.getElementById('inp-med-name').value.trim();
+  const dose = document.getElementById('inp-med-dose').value.trim();
+  const freq = document.getElementById('inp-med-freq').value.trim();
+  if(!name || !dose || !freq) return showToast("Por favor completa los 3 campos.", true);
+  
+  const newMed = { id: Date.now().toString(), name, dose, frequency: freq, start_date: new Date().toLocaleDateString() };
+  medsLog.push(newMed);
+  saveMedsLocal();
+  renderMeds();
+  
+  document.getElementById('inp-med-name').value = '';
+  document.getElementById('inp-med-dose').value = '';
+  document.getElementById('inp-med-freq').value = '';
+  showToast("Medicamento guardado.");
+  
+  if(supabaseClient) {
+    try { await supabaseClient.from('medications').insert([newMed]); } catch(e) {}
+  }
+}
+
+function deleteMed(id) {
+  medsLog = medsLog.filter(m => m.id !== id);
+  saveMedsLocal();
+  renderMeds();
+  if(supabaseClient) { try { supabaseClient.from('medications').delete().eq('id', id).then(()=>{}); } catch(e){} }
+}
+
+// --- VITALS GLOBALS & FUNCTIONS ---
+let vitalsLog = JSON.parse(localStorage.getItem('vitals_log') || '[]');
+
+function saveVitalsLocal() {
+  localStorage.setItem('vitals_log', JSON.stringify(vitalsLog));
+}
+
+function renderVitals() {
+  const tbody = document.getElementById('vitals-list');
+  if(!tbody) return;
+  
+  const sorted = [...vitalsLog].sort((a,b) => new Date(b.date) - new Date(a.date));
+  tbody.innerHTML = '';
+  sorted.forEach(v => {
+    tbody.innerHTML += `<tr>
+      <td style="font-family:var(--fm);">${v.date}</td>
+      <td style="font-family:var(--fm);color:var(--orange);">${v.sys}/${v.dia}</td>
+      <td style="font-family:var(--fm);color:var(--red);">${v.hr}</td>
+      <td><button onclick="deleteVitalSign('${v.id}')" style="background:none;border:none;color:var(--text3);cursor:pointer;">🗑</button></td>
+    </tr>`;
+  });
+  renderVitalsChart();
+}
+
+async function addVitalSign() {
+  const date = document.getElementById('inp-vit-date').value;
+  const hr = document.getElementById('inp-vit-hr').value;
+  const sys = document.getElementById('inp-vit-sys').value;
+  const dia = document.getElementById('inp-vit-dia').value;
+  if(!date || !hr || !sys || !dia) return showToast("Por favor completa los 4 campos.", true);
+  
+  const newV = { id: Date.now().toString(), date, hr: parseInt(hr), sys: parseInt(sys), dia: parseInt(dia) };
+  vitalsLog.push(newV);
+  saveVitalsLocal();
+  renderVitals();
+  showToast("Signo vital guardado.");
+  
+  if(supabaseClient) {
+    try { await supabaseClient.from('vital_signs').insert([newV]); } catch(e) {}
+  }
+}
+
+function deleteVitalSign(id) {
+  vitalsLog = vitalsLog.filter(v => v.id !== id);
+  saveVitalsLocal();
+  renderVitals();
+  if(supabaseClient) { try { supabaseClient.from('vital_signs').delete().eq('id', id).then(()=>{}); } catch(e){} }
+}
+
+let vitalsChartInstance = null;
+function renderVitalsChart() {
+  const ctx = document.getElementById('c-vitals');
+  if(!ctx) return;
+  if(vitalsChartInstance) vitalsChartInstance.destroy();
+  
+  const sorted = [...vitalsLog].sort((a,b) => new Date(a.date) - new Date(b.date));
+  const labels = sorted.map(v => v.date.substring(5)); // Solo mes y dia
+  const sysData = sorted.map(v => v.sys);
+  const diaData = sorted.map(v => v.dia);
+  const hrData = sorted.map(v => v.hr);
+  
+  vitalsChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Sistólica', data: sysData, borderColor: '#ffa726', backgroundColor: '#ffa726', tension:0.3 },
+        { label: 'Diastólica', data: diaData, borderColor: '#ffcc80', backgroundColor: '#ffcc80', tension:0.3 },
+        { label: 'Frec Cardiaca', data: hrData, borderColor: '#ef5350', backgroundColor: '#ef5350', tension:0.3 }
+      ]
+    },
+    options: bOpts(40, 160)
+  });
+}
+
+// --- GLOBAL SEARCH ---
+function globalSearch() {
+  const q = document.getElementById('gsc-input').value.toLowerCase().trim();
+  const resDiv = document.getElementById('gsc-results');
+  
+  if(!q || q.length < 2) {
+    resDiv.classList.remove('open');
+    return;
+  }
+  
+  let resultsHTML = '';
+  
+  const simpRes = symptomsLog.filter(s => s.title.toLowerCase().includes(q) || (s.body && s.body.toLowerCase().includes(q)));
+  simpRes.slice(0,5).forEach(s => {
+    resultsHTML += `<div class="gr-item" onclick="showPage('page-sintomas')"><div class="gr-cat">Síntoma</div><div class="gr-title">${s.title}</div><div class="gr-desc">${s.body||''}</div></div>`;
+  });
+  
+  const tlRes = timelineEvents.filter(t => t.title.toLowerCase().includes(q) || (t.body && t.body.toLowerCase().includes(q)));
+  tlRes.slice(0,5).forEach(t => {
+    resultsHTML += `<div class="gr-item" onclick="showPage('page-cronologia')"><div class="gr-cat">Cronología: ${t.date}</div><div class="gr-title">${t.title}</div><div class="gr-desc">${t.body||''}</div></div>`;
+  });
+  
+  const medsRes = medsLog.filter(m => m.name.toLowerCase().includes(q));
+  medsRes.forEach(m => {
+    resultsHTML += `<div class="gr-item" onclick="showPage('page-medicamentos')"><div class="gr-cat">Medicamento</div><div class="gr-title">${m.name}</div><div class="gr-desc">Dosis: ${m.dose} / ${m.frequency}</div></div>`;
+  });
+  
+  if(resultsHTML === '') resultsHTML = '<div style="padding:10px;text-align:center;font-size:11px;color:var(--text3);">No hay resultados para esta búsqueda.</div>';
+  
+  resDiv.innerHTML = resultsHTML;
+  resDiv.classList.add('open');
+}
+
+document.addEventListener('click', (e) => {
+  if(!e.target.closest('.g-search')) {
+    const resDiv = document.getElementById('gsc-results');
+    if(resDiv) resDiv.classList.remove('open');
+  }
+});
+
+// --- IMPRIMIR PDF ---
+function imprimirPDF() {
+  document.getElementById('gsc-results').classList.remove('open');
+  showToast("Generando reporte PDF...");
+  setTimeout(() => window.print(), 1000);
+}
+
+// --- MODO CONSULTA, CSV, TIMELINE FILTER ---
 function toggleConsultaMode() {
   document.body.classList.toggle('consulta-mode');
   if(document.body.classList.contains('consulta-mode')) {
-    alert("Modo Consulta ACTIVADO.\nSe han ocultado los detalles irrelevantes, las alertas no críticas y el asistente IA para presentar un reporte limpio al doctor.");
+    showToast("Modo Consulta ACTIVADO. Se han ocultado elementos innecesarios.");
+  } else {
+    showToast("Modo Consulta DESACTIVADO.");
   }
 }
 
 function exportSymptomsCSV() {
-  if(symptomsLog.length === 0) return alert('No hay síntomas para exportar.');
+  if(symptomsLog.length === 0) return showToast('No hay síntomas para exportar.', true);
   let csv = 'Fecha,Intensidad,Titulo,Detalles\n';
   symptomsLog.slice().reverse().forEach(s => {
     const d = new Date(s.timestamp).toLocaleString().replace(/,/g, '');
@@ -1483,6 +1797,7 @@ function exportSymptomsCSV() {
   a.href = url;
   a.download = 'stefani_sintomas.csv';
   a.click();
+  showToast("CSV descargado exitosamente.");
 }
 
 function filterTimeline() {
@@ -1493,63 +1808,7 @@ function filterTimeline() {
   });
 }
 
-// RECORDATORIOS
-let reminders = JSON.parse(localStorage.getItem('stefani_reminders') || '[]');
-function activateNotifications() {
-  if (!("Notification" in window)) return alert("Este navegador no soporta notificaciones nativas.");
-  Notification.requestPermission().then(perm => {
-    if(perm === 'granted') alert("Notificaciones aprobadas. Asegúrate de tener la pestaña abierta (o el navegador en segundo plano en celular) para que repiquen.");
-    else alert("Permiso denegado por el navegador.");
-  });
 }
-function addReminder() {
-  const time = document.getElementById('new-rem-time').value;
-  const text = document.getElementById('new-rem-text').value.trim();
-  if(!time || !text) return alert("Ingresa la hora y el nombre del medicamento.");
-  reminders.push({ id: Date.now(), time, text, lastShown: '' });
-  localStorage.setItem('stefani_reminders', JSON.stringify(reminders));
-  document.getElementById('new-rem-time').value = '';
-  document.getElementById('new-rem-text').value = '';
-  renderReminders();
-}
-function deleteReminder(id) {
-  reminders = reminders.filter(r => r.id !== id);
-  localStorage.setItem('stefani_reminders', JSON.stringify(reminders));
-  renderReminders();
-}
-function renderReminders() {
-  const container = document.getElementById('reminders-list');
-  if(!container) return;
-  if(reminders.length===0) { container.innerHTML = '<div style="font-size:11px;color:var(--text3);font-style:italic;">Sin recordatorios activos.</div>'; return;}
-  container.innerHTML = reminders.map(r => `
-    <div class="rem-item">
-      <div><span class="rem-time">${r.time}</span> <span style="margin-left:5px;">${r.text}</span></div>
-      <button onclick="deleteReminder(${r.id})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;">✖</button>
-    </div>
-  `).join('');
-}
-// Chequeo de Recordatorios cada 30s
-setInterval(() => {
-  if (Notification.permission !== 'granted') return;
-  const now = new Date();
-  const hm = String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-  const dStr = now.toLocaleDateString();
-  reminders.forEach(r => {
-    if(r.time === hm && r.lastShown !== dStr) {
-      r.lastShown = dStr;
-      localStorage.setItem('stefani_reminders', JSON.stringify(reminders));
-      
-      if(navigator.serviceWorker && navigator.serviceWorker.ready) {
-        navigator.serviceWorker.ready.then(reg => {
-          try { reg.showNotification('💊 Hora de medicina', { body: r.text + ' a las '+r.time, icon: './icon.png', vibrate: [200, 100, 200] }); } catch(e){}
-        }).catch(()=>{});
-      } else {
-        new Notification('💊 Hora de medicina: ' + r.text, { body: 'A las: '+r.time, icon: './icon.png' });
-      }
-    }
-  });
-}, 30000);
-window.addEventListener('load', () => setTimeout(renderReminders, 500));
 </script>
 <script>
 if ('serviceWorker' in navigator) {
