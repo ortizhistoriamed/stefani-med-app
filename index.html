@@ -1006,22 +1006,6 @@ async function loadSupabaseData() {
     } else if (timelineEvents.length > 0) {
       await supabaseClient.from('timeline_events').insert(timelineEvents.map(t => ({ date: t.date, title: t.title, body: t.body, badge: t.badge, timestamp: new Date(t.timestamp).toISOString() })));
     }
-
-    const { data: medsData } = await supabaseClient.from('medications').select('*');
-    if (medsData && medsData.length > 0) {
-      medsLog = medsData;
-      saveMedsLocal();
-    } else if (medsLog.length > 0) {
-      await supabaseClient.from('medications').insert(medsLog);
-    }
-
-    const { data: vitalsData } = await supabaseClient.from('vital_signs').select('*');
-    if (vitalsData && vitalsData.length > 0) {
-      vitalsLog = vitalsData;
-      saveVitalsLocal();
-    } else if (vitalsLog.length > 0) {
-      await supabaseClient.from('vital_signs').insert(vitalsLog);
-    }
   } catch (err) {
     console.error('Error cargando Supabase:', err);
   }
@@ -1232,17 +1216,14 @@ function renderSymptoms() {
 
 let sympChart = null;
 let freqChart = null;
-let trendChart = null;
 function renderSymptomChart() {
   const ctx = document.getElementById('c-sintomas');
   const ctxF = document.getElementById('c-frecuencia');
-  const ctxT = document.getElementById('c-sint-trend');
-  if(!ctx || !ctxF || !ctxT) return;
+  if(!ctx || !ctxF) return;
   if(sympChart) sympChart.destroy();
   if(freqChart) freqChart.destroy();
-  if(trendChart) trendChart.destroy();
   
-  // Intensidad Individual (últimos 10)
+  // Intensidad (filtrar los de intensity > 0)
   const recent = symptomsLog.filter(s => s.intensity > 0).slice(-10);
   const labels = recent.map(s => new Date(s.timestamp).toLocaleDateString(undefined, {month:'short', day:'numeric'}));
   const data = recent.map(s => s.intensity);
@@ -1256,29 +1237,7 @@ function renderSymptomChart() {
     options: bOpts(0, 10)
   });
 
-  // Tendencia Promedio Diaria
-  const agrp = {};
-  symptomsLog.forEach(s => {
-    if(s.intensity > 0) {
-      const dLabel = new Date(s.timestamp).toLocaleDateString(undefined, {month:'short', day:'numeric'});
-      if(!agrp[dLabel]) agrp[dLabel] = {sum:0, count:0};
-      agrp[dLabel].sum += s.intensity;
-      agrp[dLabel].count++;
-    }
-  });
-  const tLabels = Object.keys(agrp).slice(-14); // últimos 14 días
-  const tData = tLabels.map(l => (agrp[l].sum / agrp[l].count).toFixed(1));
-
-  trendChart = new Chart(ctxT, {
-    type: 'line',
-    data: { labels: tLabels, datasets: [{
-      label: 'Promedio Intensidad Diaria', data: tData, borderColor: '#64b5f6', backgroundColor: 'rgba(100,181,246,0.1)',
-      tension: 0.3, pointRadius: 3, fill: true
-    }]},
-    options: bOpts(0, 10)
-  });
-
-  // Frecuencia Acumulada
+  // Frecuencia (Agrupar por title, excluyendo diarios si empiezan con 📖)
   const counts = {};
   symptomsLog.forEach(s => {
     if(s.title.startsWith('📖')) return;
@@ -1300,7 +1259,7 @@ function renderSymptomChart() {
   });
 }
 // Initial render
-window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); renderTimelineEvents(); renderRepoCats(); filterRepo(); loadSupabaseData(); renderMeds(); renderVitals(); });
+window.addEventListener('load', () => { renderSymptoms(); renderNeutronNotes(); renderTimelineEvents(); renderRepoCats(); filterRepo(); loadSupabaseData(); });
 
 // REPOSITORIO LOGIC
 const repoFiles = [
@@ -1600,179 +1559,7 @@ function showToast(msg, isError = false) {
   setTimeout(() => { t.style.display = 'none'; }, 4500);
 }
 
-// --- MEDS GLOBALS & FUNCTIONS ---
-let medsLog = JSON.parse(localStorage.getItem('meds_log') || '[]');
-
-function saveMedsLocal() {
-  localStorage.setItem('meds_log', JSON.stringify(medsLog));
-}
-
-function renderMeds() {
-  const tbody = document.getElementById('meds-list');
-  if(!tbody) return;
-  tbody.innerHTML = '';
-  medsLog.forEach(m => {
-    tbody.innerHTML += `<tr>
-      <td style="color:var(--text);font-weight:600;">${m.name}</td>
-      <td style="font-family:var(--fm);">${m.dose}</td>
-      <td>${m.frequency}</td>
-      <td style="font-family:var(--fm);">${m.start_date || new Date().toLocaleDateString()}</td>
-      <td><button onclick="deleteMed('${m.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;padding:2px 8px;">🗑</button></td>
-    </tr>`;
-  });
-}
-
-async function addMed() {
-  const name = document.getElementById('inp-med-name').value.trim();
-  const dose = document.getElementById('inp-med-dose').value.trim();
-  const freq = document.getElementById('inp-med-freq').value.trim();
-  if(!name || !dose || !freq) return showToast("Por favor completa los 3 campos.", true);
-  
-  const newMed = { id: Date.now().toString(), name, dose, frequency: freq, start_date: new Date().toLocaleDateString() };
-  medsLog.push(newMed);
-  saveMedsLocal();
-  renderMeds();
-  
-  document.getElementById('inp-med-name').value = '';
-  document.getElementById('inp-med-dose').value = '';
-  document.getElementById('inp-med-freq').value = '';
-  showToast("Medicamento guardado.");
-  
-  if(supabaseClient) {
-    try { await supabaseClient.from('medications').insert([newMed]); } catch(e) {}
-  }
-}
-
-function deleteMed(id) {
-  medsLog = medsLog.filter(m => m.id !== id);
-  saveMedsLocal();
-  renderMeds();
-  if(supabaseClient) { try { supabaseClient.from('medications').delete().eq('id', id).then(()=>{}); } catch(e){} }
-}
-
-// --- VITALS GLOBALS & FUNCTIONS ---
-let vitalsLog = JSON.parse(localStorage.getItem('vitals_log') || '[]');
-
-function saveVitalsLocal() {
-  localStorage.setItem('vitals_log', JSON.stringify(vitalsLog));
-}
-
-function renderVitals() {
-  const tbody = document.getElementById('vitals-list');
-  if(!tbody) return;
-  
-  const sorted = [...vitalsLog].sort((a,b) => new Date(b.date) - new Date(a.date));
-  tbody.innerHTML = '';
-  sorted.forEach(v => {
-    tbody.innerHTML += `<tr>
-      <td style="font-family:var(--fm);">${v.date}</td>
-      <td style="font-family:var(--fm);color:var(--orange);">${v.sys}/${v.dia}</td>
-      <td style="font-family:var(--fm);color:var(--red);">${v.hr}</td>
-      <td><button onclick="deleteVitalSign('${v.id}')" style="background:none;border:none;color:var(--text3);cursor:pointer;">🗑</button></td>
-    </tr>`;
-  });
-  renderVitalsChart();
-}
-
-async function addVitalSign() {
-  const date = document.getElementById('inp-vit-date').value;
-  const hr = document.getElementById('inp-vit-hr').value;
-  const sys = document.getElementById('inp-vit-sys').value;
-  const dia = document.getElementById('inp-vit-dia').value;
-  if(!date || !hr || !sys || !dia) return showToast("Por favor completa los 4 campos.", true);
-  
-  const newV = { id: Date.now().toString(), date, hr: parseInt(hr), sys: parseInt(sys), dia: parseInt(dia) };
-  vitalsLog.push(newV);
-  saveVitalsLocal();
-  renderVitals();
-  showToast("Signo vital guardado.");
-  
-  if(supabaseClient) {
-    try { await supabaseClient.from('vital_signs').insert([newV]); } catch(e) {}
-  }
-}
-
-function deleteVitalSign(id) {
-  vitalsLog = vitalsLog.filter(v => v.id !== id);
-  saveVitalsLocal();
-  renderVitals();
-  if(supabaseClient) { try { supabaseClient.from('vital_signs').delete().eq('id', id).then(()=>{}); } catch(e){} }
-}
-
-let vitalsChartInstance = null;
-function renderVitalsChart() {
-  const ctx = document.getElementById('c-vitals');
-  if(!ctx) return;
-  if(vitalsChartInstance) vitalsChartInstance.destroy();
-  
-  const sorted = [...vitalsLog].sort((a,b) => new Date(a.date) - new Date(b.date));
-  const labels = sorted.map(v => v.date.substring(5)); // Solo mes y dia
-  const sysData = sorted.map(v => v.sys);
-  const diaData = sorted.map(v => v.dia);
-  const hrData = sorted.map(v => v.hr);
-  
-  vitalsChartInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        { label: 'Sistólica', data: sysData, borderColor: '#ffa726', backgroundColor: '#ffa726', tension:0.3 },
-        { label: 'Diastólica', data: diaData, borderColor: '#ffcc80', backgroundColor: '#ffcc80', tension:0.3 },
-        { label: 'Frec Cardiaca', data: hrData, borderColor: '#ef5350', backgroundColor: '#ef5350', tension:0.3 }
-      ]
-    },
-    options: bOpts(40, 160)
-  });
-}
-
-// --- GLOBAL SEARCH ---
-function globalSearch() {
-  const q = document.getElementById('gsc-input').value.toLowerCase().trim();
-  const resDiv = document.getElementById('gsc-results');
-  
-  if(!q || q.length < 2) {
-    resDiv.classList.remove('open');
-    return;
-  }
-  
-  let resultsHTML = '';
-  
-  const simpRes = symptomsLog.filter(s => s.title.toLowerCase().includes(q) || (s.body && s.body.toLowerCase().includes(q)));
-  simpRes.slice(0,5).forEach(s => {
-    resultsHTML += `<div class="gr-item" onclick="showPage('page-sintomas')"><div class="gr-cat">Síntoma</div><div class="gr-title">${s.title}</div><div class="gr-desc">${s.body||''}</div></div>`;
-  });
-  
-  const tlRes = timelineEvents.filter(t => t.title.toLowerCase().includes(q) || (t.body && t.body.toLowerCase().includes(q)));
-  tlRes.slice(0,5).forEach(t => {
-    resultsHTML += `<div class="gr-item" onclick="showPage('page-cronologia')"><div class="gr-cat">Cronología: ${t.date}</div><div class="gr-title">${t.title}</div><div class="gr-desc">${t.body||''}</div></div>`;
-  });
-  
-  const medsRes = medsLog.filter(m => m.name.toLowerCase().includes(q));
-  medsRes.forEach(m => {
-    resultsHTML += `<div class="gr-item" onclick="showPage('page-medicamentos')"><div class="gr-cat">Medicamento</div><div class="gr-title">${m.name}</div><div class="gr-desc">Dosis: ${m.dose} / ${m.frequency}</div></div>`;
-  });
-  
-  if(resultsHTML === '') resultsHTML = '<div style="padding:10px;text-align:center;font-size:11px;color:var(--text3);">No hay resultados para esta búsqueda.</div>';
-  
-  resDiv.innerHTML = resultsHTML;
-  resDiv.classList.add('open');
-}
-
-document.addEventListener('click', (e) => {
-  if(!e.target.closest('.g-search')) {
-    const resDiv = document.getElementById('gsc-results');
-    if(resDiv) resDiv.classList.remove('open');
-  }
-});
-
-// --- IMPRIMIR PDF ---
-function imprimirPDF() {
-  document.getElementById('gsc-results').classList.remove('open');
-  showToast("Generando reporte PDF...");
-  setTimeout(() => window.print(), 1000);
-}
-
-// --- MODO CONSULTA, CSV, TIMELINE FILTER ---
+// --- NUEVAS FUNCIONES: MODO CONSULTA, CSV, TIMELINE FILTER Y RECORDATORIOS ---
 function toggleConsultaMode() {
   document.body.classList.toggle('consulta-mode');
   if(document.body.classList.contains('consulta-mode')) {
@@ -1806,8 +1593,6 @@ function filterTimeline() {
     const text = el.innerText.toLowerCase();
     el.style.display = text.includes(q) ? 'block' : 'none';
   });
-}
-
 }
 </script>
 <script>
