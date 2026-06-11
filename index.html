@@ -541,6 +541,26 @@ main{padding-top:54px;}
       <div class="cw" style="height:220px;"><canvas id="c-leuco"></canvas></div>
     </div>
   </div>
+  <div class="g2" style="margin-top:1.5rem;">
+    <div>
+      <div class="ct">Hemoglobina g/dL (Recuperación)</div>
+      <div class="cw" style="height:220px;"><canvas id="c-hb"></canvas></div>
+    </div>
+    <div>
+      <div class="ct">TGP (ALT) UI/L (Pico Hepático 78)</div>
+      <div class="cw" style="height:220px;"><canvas id="c-tgp"></canvas></div>
+    </div>
+  </div>
+  <div class="g2" style="margin-top:1.5rem;">
+    <div>
+      <div class="ct">Glicemia mg/dL (Marcador Metabólico / SOP)</div>
+      <div class="cw" style="height:220px;"><canvas id="c-glicemia"></canvas></div>
+    </div>
+    <div>
+      <div class="ct">Fórmula Leucocitaria (% Neutro vs Linfocitos)</div>
+      <div class="cw" style="height:220px;"><canvas id="c-inmune"></canvas></div>
+    </div>
+  </div>
 </div>
 
 <div class="sep"></div>
@@ -773,6 +793,41 @@ new Chart(document.getElementById('c-leuco'),{type:'line',data:{labels:L6,datase
    pointBackgroundColor:(ctx)=>ctx.dataIndex===4?'#66bb6a':'#ef5350',fill:true},
   {label:'Máx 10.0',data:ref(10,6),borderColor:'#ffa726',borderDash:[4,3],borderWidth:1.5,pointRadius:0}
 ]},options:bOpts(7,25)});
+
+// HEMOGLOBINA
+const L6_hb=['05-Sep-25','11-Oct-25','13-Oct-25','30-Dic-25','30-Mar-26','16-May-26'];
+new Chart(document.getElementById('c-hb'),{type:'line',data:{labels:L6_hb,datasets:[
+  {label:'Hemoglobina',data:[10.1,10.8,10.4,12.5,11.9,12.5],borderColor:'#42a5f5',backgroundColor:'rgba(66,165,245,0.07)',tension:0.3,pointRadius:5,
+   pointBackgroundColor:(ctx)=>ctx.raw>=12?'#66bb6a':'#ef5350',fill:true},
+  {label:'Mín 12.0',data:ref(12,6),borderColor:'#8892b0',borderDash:[4,3],borderWidth:1.5,pointRadius:0}
+]},options:bOpts(8,14)});
+
+// TGP
+const L5_quim=['05-Sep-25','11-Oct-25','13-Oct-25','30-Dic-25','30-Mar-26'];
+new Chart(document.getElementById('c-tgp'),{type:'line',data:{labels:L5_quim,datasets:[
+  {label:'TGP',data:[28.1,78,45.0,26.2,30.9],borderColor:'#ab47bc',backgroundColor:'rgba(171,71,188,0.07)',tension:0.3,pointRadius:5,
+   pointBackgroundColor:(ctx)=>ctx.raw>41?'#ef5350':'#66bb6a',fill:true},
+  {label:'Máx 41',data:ref(41,5),borderColor:'#ffa726',borderDash:[4,3],borderWidth:1.5,pointRadius:0}
+]},options:bOpts(0,90)});
+
+// GLICEMIA
+new Chart(document.getElementById('c-glicemia'),{type:'line',data:{labels:L5_quim,datasets:[
+  {label:'Glicemia',data:[73,120,85,93,90.1],borderColor:'#26c6da',backgroundColor:'rgba(38,198,218,0.07)',tension:0.3,pointRadius:5,
+   pointBackgroundColor:(ctx)=>ctx.raw>=100?'#ef5350':'#66bb6a',fill:true},
+  {label:'Límite 99',data:ref(99,5),borderColor:'#ffa726',borderDash:[4,3],borderWidth:1.5,pointRadius:0}
+]},options:bOpts(60,130)});
+
+// FORMULA LEUCOCITARIA (Segmentados vs Linfocitos)
+new Chart(document.getElementById('c-inmune'),{type:'line',data:{labels:L6_hb,datasets:[
+  {label:'Neutrófilos %',data:[61.4,71.0,60.1,60.2,58,69.9],borderColor:'#ef5350',borderWidth:2,tension:0.3,pointRadius:4},
+  {label:'Linfocitos %',data:[33.6,25.0,32.8,30.5,38,26.9],borderColor:'#66bb6a',borderWidth:2,tension:0.3,pointRadius:4}
+]},
+  options: {
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true,labels:{color:'#8892b0',font:{size:10},boxWidth:12}},tooltip:{mode:'index',intersect:false,backgroundColor:'#1c2540'}},
+    scales:{x:{ticks:{font:{size:9},maxRotation:30},grid:{color:gc},border:{color:'rgba(255,255,255,0.08)'}},y:{min:20,max:80,ticks:{font:{size:9}},grid:{color:gc},border:{color:'rgba(255,255,255,0.08)'}}}
+  }
+});
 
 // AI CHAT & SYMPTOM LOGIC
 const _gk=['gsk_RGn8MlVWZAWaoTnQPjEP','WGdyb3FYS096WjajTXcbqyGEkBW0N3MM'];
